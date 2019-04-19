@@ -1,13 +1,13 @@
 import random
-
+from game_object import GameObject
 import pygame
 
 
 class Enemy:
-    def __init__(self,  radius):
+    def __init__(self,  x, y):
+        self.x = x
+        self.y = y
         self.radius = 10
-        self.x = random.randrange(0, 1200)
-        self.y = random.randrange(0, 600)
 
     def update(self):
         pass
