@@ -4,8 +4,8 @@ from game_object import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, x, y, field_width, field_height):
-        super().__init__(x, y, 25, field_width, field_height)
+    def __init__(self, x, y, game):
+        super().__init__(x, y, 25, game)
         self.x, self.y = x, y
         self.speed = 2
         self.dirs = {
@@ -20,8 +20,8 @@ class Player(GameObject):
             keydown_handlers_dict[key].append(self.on_move)
             keyup_handlers_dict[key].append(self.on_stop)
 
-    def draw(self, surface):
-        pygame.draw.circle(surface, pygame.Color('red'), (self.x, self.y), 25)
+    def draw(self):
+        pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
 
     def update(self):
         dx = self.move_direction[0] * self.speed
@@ -31,5 +31,5 @@ class Player(GameObject):
     def on_move(self, key):
         self.move_direction = self.dirs[key]
 
-    def on_stop(self, key):
+    def on_stop(self):
         self.move_direction = (0, 0)

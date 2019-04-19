@@ -3,16 +3,19 @@ from game_object import GameObject
 import pygame
 
 
-class Enemy:
-    def __init__(self, x, y):
+class Enemy(GameObject):
+    def __init__(self, x, y, game):
+        super().__init__(x, y, 25, game)
         self.x = x
         self.y = y
-        self.radius = 10
         self.direction = ()
 
     def update(self):
         self.x += random.randrange(-5, 5)
         self.y += random.randrange(-5, 5)
 
-    def draw(self, surface):
-        pygame.draw.circle(surface, pygame.Color('BLUE'), (self.x, self.y), self.radius)
+    def draw(self):
+        pygame.draw.circle(self.game.surface, pygame.Color('BLUE'), (self.x, self.y), self.radius)
+
+    def choose_direction(self):
+        pass

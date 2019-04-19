@@ -15,16 +15,16 @@ class Game:
                  caption,
                  back_image_filename,
                  frame_rate):
+        self.surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.background_image = pygame.image.load(back_image_filename)
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        self.player = Player(100, 100, 800, 600)
+        self.player = Player(100, 100, self)
         self.enemies = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         pygame.font.init()
-        self.surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption(caption)
         self.clock = pygame.time.Clock()
         self.keydown_handlers = defaultdict(list)
@@ -37,7 +37,7 @@ class Game:
 
     def draw(self):
         for o in self.objects:
-            o.draw(self.surface)
+            o.draw()
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -73,12 +73,12 @@ class Game:
             self.clock.tick(self.frame_rate)
 
     def create_enemy(self):
-        x = random.randrange(self.surface.get_width())
+        x = random.randrange(self.surface.get_height())
         while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            x = random.randrange(self.surface.get_width())
+            x = random.randrange(self.surface.get_height())
 
-        y = random.randrange(self.surface.get_height())
+        y = random.randrange(self.surface.get_width())
         while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            y = random.randrange(self.surface.get_height())
+            y = random.randrange(self.surface.get_width())
 
-        return Enemy(x, y)
+        return Enemy(x, y, self)
