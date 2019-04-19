@@ -1,8 +1,8 @@
 import pygame
-from math import sqrt
 from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
+import geometry
 
 
 class Player(GameObject):
@@ -38,16 +38,10 @@ class Player(GameObject):
             x += self.dirs[key][0]
             y += self.dirs[key][1]
 
-        self.move_direction = Player._normalize_direction((x, y))
+        self.move_direction = geometry.normalize_direction((x, y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
 
-    @staticmethod
-    def _normalize_direction(direction):
-        if direction == (0, 0):
-            return (0, 0)
-        c = sqrt(direction[0] ** 2 + direction[1] ** 2)
 
-        return (direction[0] / c, direction[1] / c)
 
     def on_released(self, key):
         self.pressed.remove(key)
