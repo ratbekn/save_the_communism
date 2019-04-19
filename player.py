@@ -4,8 +4,9 @@ from game_object import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, game, x, y, field_width, field_height):
-        super().__init__(x, y, 25, field_width, field_height)
+    def __init__(self, x, y, game):
+        super().__init__(x, y, 25, game)
+        print(game)
         self.x, self.y = x, y
         self.speed = 4
         self.dirs = {
@@ -15,7 +16,6 @@ class Player(GameObject):
             pygame.K_s: (0, 1),
         }
         self.pressed = set()
-        self.game = game
         self.is_speaking = False
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
@@ -29,10 +29,10 @@ class Player(GameObject):
     def flip_influence(self, key):
         self.is_speaking = not self.is_speaking
 
-    def draw(self, surface):
+    def draw(self):
         if self.is_speaking:
-            pygame.draw.circle(surface, pygame.Color('white'), (self.x, self.y), 50, 1)
-        pygame.draw.circle(surface, pygame.Color('red'), (self.x, self.y), 25)
+            pygame.draw.circle(self.game.surface, pygame.Color('white'), (self.x, self.y), 50, 1)
+        pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
 
     def update(self):
         if self.is_speaking:
@@ -55,13 +55,6 @@ class Player(GameObject):
 
         return (direction[0] / c, direction[1] / c)
 
-    '''
-    def on_move(self, key):
-        self.move_direction = self.dirs[key]
-
-    def on_stop(self):
-        self.move_direction = (0, 0)
-    '''
     def on_released(self, key):
         self.pressed.remove(key)
 

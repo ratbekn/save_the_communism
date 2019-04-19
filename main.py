@@ -5,8 +5,9 @@ from player import Player
 
 
 def main():
-    game = Game('Save The Communism', 800, 600, "images/background.png", 60)
-    player = Player(game, 100, 100, 800, 600)
+    game = Game('Save The Communism', "images/background.png", 60)
+    '''
+    player = Player(game, 100, 100)
     player.setup_handlers(game.keydown_handlers, game.keyup_handlers)
     enemies = []
 
@@ -15,6 +16,7 @@ def main():
 
     game.objects.append(player)
     game.objects.extend(enemies)
+    '''
     game.run()
 
 
