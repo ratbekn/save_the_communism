@@ -4,13 +4,15 @@ import pygame
 
 
 class Enemy:
-    def __init__(self,  x, y):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
         self.radius = 10
+        self.direction = ()
 
     def update(self):
-        pass
+        self.x += random.randrange(-5, 5)
+        self.y += random.randrange(-5, 5)
 
     def draw(self, surface):
         pygame.draw.circle(surface, pygame.Color('BLUE'), (self.x, self.y), self.radius)
