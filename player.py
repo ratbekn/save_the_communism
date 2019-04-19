@@ -8,7 +8,7 @@ class Player(GameObject):
         super().__init__(x, y, 25, game)
         print(game)
         self.x, self.y = x, y
-        self.speed = 4
+        self.speed = 8
         self.dirs = {
             pygame.K_a: (-1, 0),
             pygame.K_d: (1, 0),

@@ -12,13 +12,15 @@ import pygame.camera
 
 from collections import defaultdict
 
-BACKGROUND_IMAGE_SIZE = 128
+BACKGROUND_IMAGE_SIZE = 800
 
 class Game:
     def __init__(self,
                  caption,
                  back_image_filename,
-                 frame_rate):
+                 frame_rate, width, height):
+        self.width = width
+        self.height = height
         self.surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.background_image = pygame.image.load(back_image_filename)
         self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
