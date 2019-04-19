@@ -1,3 +1,4 @@
+from force_field import ForceField
 from game_object import GameObject
 import pygame
 import math
@@ -30,3 +31,7 @@ class Enemy(GameObject):
             else:
                 self.move_direction = (0, -1)
 
+    def handle_collisions(self, coll_objects):
+        for object in coll_objects:
+            if isinstance(object, ForceField):
+                self.is_alive = False
