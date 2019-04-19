@@ -12,7 +12,7 @@ class Player(GameObject):
             pygame.K_a: (-1, 0),
             pygame.K_d: (1, 0),
             pygame.K_w: (0, -1),
-            pygame.K_s: (0, 1),
+            pygame.K_s: (0, 1)
         }
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
