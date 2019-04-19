@@ -5,6 +5,7 @@ import math
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
+from citizen import Citizen
 
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
@@ -72,6 +73,8 @@ class Game:
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
             self.enemies.append(self.create_enemy())
+        self.objects.append(Citizen(100, 200, self))
+
         self.objects.extend(self.enemies)
         while not self.game_over:
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):

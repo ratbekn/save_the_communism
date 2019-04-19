@@ -2,6 +2,7 @@ import pygame
 from math import sqrt
 from game_object import GameObject
 from force_field import ForceField
+from enemy import Enemy
 
 
 class Player(GameObject):
@@ -55,4 +56,6 @@ class Player(GameObject):
         self.pressed.add(key)
 
     def handle_collisions(self, coll_objects):
-        pass
+        for object in coll_objects:
+            if isinstance(object, Enemy):
+                self.is_alive = False
