@@ -17,6 +17,8 @@ class Player(GameObject):
             pygame.K_s: (0, 1)
         }
         self.pressed = set()
+        self.image = pygame.image.load('images/lenin.png')
+        self.image = pygame.transform.scale(self.image, (self.radius * 3, self.radius * 3))
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
         for key in self.dirs:
@@ -29,7 +31,8 @@ class Player(GameObject):
         self.game.objects.append(ForceField(self.x, self.y, self.game))
 
     def draw(self):
-        pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
+        #pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
+        self.game.surface.blit(self.image, (self.x - self.radius, self.y - self.radius))
 
     def update(self):
         x, y = 0, 0
