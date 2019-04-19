@@ -12,7 +12,7 @@ class Player(GameObject):
             pygame.K_a: (-1, 0),
             pygame.K_d: (1, 0),
             pygame.K_w: (0, -1),
-            pygame.K_s: (0, 1),
+            pygame.K_s: (0, 1)
         }
         self.pressed = set()
         self.is_speaking = False
