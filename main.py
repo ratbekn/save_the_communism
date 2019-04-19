@@ -6,7 +6,8 @@ import random
 
 def main():
     game = Game('Save The Communism', 800, 600, "images/background.png", 60)
-    player = Player(100, 100)
+    player = Player(100, 100, 800, 600)
+    player.setup_handlers(game.keydown_handlers, game.keyup_handlers)
     enemies = []
 
     for i in range(1):
@@ -15,6 +16,7 @@ def main():
     game.objects.append(player)
     game.objects.extend(enemies)
     game.run()
+
 
 
 if __name__ == '__main__':
