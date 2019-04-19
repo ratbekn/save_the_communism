@@ -4,7 +4,7 @@ from game_object import GameObject
 
 
 class Player(GameObject):
-    def __init__(self, x, y, field_width, field_height):
+    def __init__(self, game, x, y, field_width, field_height):
         super().__init__(x, y, 25, 25)
         self.x, self.y = x, y
         self.field_height = field_height
@@ -17,11 +17,13 @@ class Player(GameObject):
         }
         self.direction = (0, 0)
         self.abs_speed = 2
+        self.game = game
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
         for key in self.dirs:
             keydown_handlers_dict[key].append(self.handle_keyboard)
             keyup_handlers_dict[key].append(self.stop_move)
+
 
     def draw(self, surface):
         pygame.draw.circle(surface, pygame.Color('red'), (self.x, self.y), 25)
@@ -39,6 +41,7 @@ class Player(GameObject):
 
     def handle_keyboard(self, key):
         self.direction = self.dirs[key]
+
 
     def stop_move(self, key):
         self.direction = (0, 0)
