@@ -1,7 +1,7 @@
-from game import Game
-from player import Player
-from enemy import Enemy
 import random
+from game import Game
+from enemy import Enemy
+from player import Player
 
 
 def main():

@@ -1,9 +1,10 @@
 
 
 class GameObject:
-    def __init__(self, x, y, r, field_width, field_height):
-        self.field_height = field_height
-        self.field_width = field_width
+    def __init__(self, x, y, r, game):
+        self.game = game
+        self.field_height = game.surface.get_height()
+        self.field_width = game.surface.get_width()
         self.x = x
         self.y = y
         self.radius = r
@@ -26,7 +27,7 @@ class GameObject:
     def bottom(self):
         return self.y + self.radius
 
-    def draw(self, surface):
+    def draw(self):
         pass
 
     def set_position(self, x, y):

@@ -59,7 +59,7 @@ class Player(GameObject):
     def on_move(self, key):
         self.move_direction = self.dirs[key]
 
-    def on_stop(self, key):
+    def on_stop(self):
         self.move_direction = (0, 0)
     '''
     def on_released(self, key):
