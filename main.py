@@ -1,8 +1,12 @@
 from game import Game
+from player import Player
 
 
 def main():
-    Game('Save The Communism', 800, 600, "images/background.png", 60).run()
+    game = Game('Save The Communism', 800, 600, "images/background.png", 60)
+    player = Player(100, 100)
+    game.objects.append(player)
+    game.run()
 
 
 
