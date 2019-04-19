@@ -1,4 +1,3 @@
-import random
 from game_object import GameObject
 import pygame
 import math
