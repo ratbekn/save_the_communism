@@ -14,6 +14,7 @@ class Player(GameObject):
             pygame.K_w: (0, -1),
             pygame.K_s: (0, 1),
         }
+        self.direction = (0, 0)
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
         for key in self.dirs:

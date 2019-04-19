@@ -1,4 +1,3 @@
-from pygame.rect import Rect
 
 
 class GameObject:
