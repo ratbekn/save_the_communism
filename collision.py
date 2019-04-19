@@ -25,3 +25,4 @@ class CollisionsResolver:
                 if CollisionsResolver._are_collided(first, second):
                     collisions[first].append(second)
                     collisions[second].append(first)
+        return collisions

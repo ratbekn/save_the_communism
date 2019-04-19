@@ -9,4 +9,4 @@ class Citizen(GameObject):
         pass
 
     def draw(self):
-        pygame.draw.circle(self.game.surface, pygame.Color("grey"), 20)
+        pygame.draw.circle(self.game.surface, pygame.Color("grey"), (self.x, self.y), 20)

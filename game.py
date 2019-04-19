@@ -4,7 +4,7 @@ import random
 import math
 from player import Player
 from enemy import Enemy
-
+from collision import CollisionsResolver
 
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
@@ -81,6 +81,12 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
+            CollisionsResolver.resolve_collisions(self.objects)
+            alive_objs = []
+            for object in self.objects:
+                if object.is_alive:
+                    alive_objs.append(object)
+            self.objects = alive_objs
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)

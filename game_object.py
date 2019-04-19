@@ -10,6 +10,7 @@ class GameObject:
         self.radius = r
         self.speed = 5
         self.move_direction = (0, 0)
+        self.is_alive = True
 
     @property
     def left(self):
@@ -28,6 +29,9 @@ class GameObject:
         return self.y + self.radius
 
     def draw(self):
+        pass
+
+    def handle_collisions(self, coll_objects):
         pass
 
     def set_position(self, x, y):

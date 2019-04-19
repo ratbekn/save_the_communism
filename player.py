@@ -1,6 +1,7 @@
 import pygame
 from math import sqrt
 from game_object import GameObject
+from force_field import ForceField
 
 
 class Player(GameObject):
@@ -16,28 +17,21 @@ class Player(GameObject):
             pygame.K_s: (0, 1),
         }
         self.pressed = set()
-        self.is_speaking = False
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
         for key in self.dirs:
             keydown_handlers_dict[key].append(self.on_pressed)
             keyup_handlers_dict[key].append(self.on_released)
+        keydown_handlers_dict[pygame.K_SPACE].append(self.hit)
+        keyup_handlers_dict[pygame.K_SPACE].append(self.hit)
 
-        keydown_handlers_dict[pygame.K_SPACE].append(self.flip_influence)
-        keyup_handlers_dict[pygame.K_SPACE].append(self.flip_influence)
-
-    def flip_influence(self, key):
-        self.is_speaking = not self.is_speaking
+    def hit(self, key):
+        self.game.objects.append(ForceField(self.x, self.y, self.game))
 
     def draw(self):
-        if self.is_speaking:
-            pygame.draw.circle(self.game.surface, pygame.Color('white'), (self.x, self.y), 50, 1)
         pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
 
     def update(self):
-        if self.is_speaking:
-            return
-
         x, y = 0, 0
         self.move_direction = (0, 0)
         for key in self.pressed:
@@ -60,3 +54,6 @@ class Player(GameObject):
 
     def on_pressed(self, key):
         self.pressed.add(key)
+
+    def handle_collisions(self, coll_objects):
+        pass
