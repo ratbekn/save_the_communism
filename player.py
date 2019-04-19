@@ -24,12 +24,12 @@ class Player(GameObject):
         pygame.draw.circle(surface, pygame.Color('red'), (self.x, self.y), 25)
 
     def update(self):
-        dx = self.direction[0] * self.speed
-        dy = self.direction[1] * self.speed
+        dx = self.move_direction[0] * self.speed
+        dy = self.move_direction[1] * self.speed
         self.move(dx, dy)
 
     def on_move(self, key):
-        self.direction = self.dirs[key]
+        self.move_direction = self.dirs[key]
 
     def on_stop(self, key):
-        self.direction = (0, 0)
+        self.move_direction = (0, 0)
