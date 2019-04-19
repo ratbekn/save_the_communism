@@ -31,5 +31,5 @@ class Player(GameObject):
     def on_move(self, key):
         self.move_direction = self.dirs[key]
 
-    def on_stop(self):
+    def on_stop(self, key):
         self.move_direction = (0, 0)

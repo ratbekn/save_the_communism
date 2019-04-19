@@ -8,7 +8,7 @@ class GameObject:
         self.x = x
         self.y = y
         self.radius = r
-        self.speed = 1
+        self.speed = 5
         self.move_direction = (0, 0)
 
     @property
