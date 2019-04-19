@@ -1,5 +1,8 @@
+from game import Game
+
+
 def main():
-    pass
+    Game('save_the_communism', 800, 600, "images/background.png", 60).run()
 
 
 if __name__ == '__main__':
