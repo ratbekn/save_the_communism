@@ -4,11 +4,15 @@ import random
 import math
 from player import Player
 from enemy import Enemy
-from collections import defaultdict
+
 
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
+import pygame.camera
 
+from collections import defaultdict
+
+BACKGROUND_IMAGE_SIZE = 128
 
 class Game:
     def __init__(self,
@@ -17,6 +21,7 @@ class Game:
                  frame_rate):
         self.surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.background_image = pygame.image.load(back_image_filename)
+        self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
@@ -63,7 +68,9 @@ class Game:
             self.enemies.append(self.create_enemy())
         self.objects.extend(self.enemies)
         while not self.game_over:
-            self.surface.blit(self.background_image, (0, 0))
+            for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
+                for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
+                    self.surface.blit(self.background_image, (x, y))
 
             self.handle_events()
             self.update()

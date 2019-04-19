@@ -1,22 +1,12 @@
-import random
 from game import Game
-from enemy import Enemy
-from player import Player
 
+
+FIELD_WIDTH = 2048
+FIELD_HEIGHT = 2048
 
 def main():
+
     game = Game('Save The Communism', "images/background.png", 60)
-    '''
-    player = Player(game, 100, 100)
-    player.setup_handlers(game.keydown_handlers, game.keyup_handlers)
-    enemies = []
-
-    for i in range(1):
-        enemies.append(Enemy(random.randrange(0, 500), random.randrange(0, 500)))
-
-    game.objects.append(player)
-    game.objects.extend(enemies)
-    '''
     game.run()
 
 
