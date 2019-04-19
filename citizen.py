@@ -4,6 +4,7 @@ from force_field import ForceField
 from fellow import Fellow
 
 
+
 class Citizen(GameObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 20, game)

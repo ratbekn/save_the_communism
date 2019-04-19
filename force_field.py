@@ -1,6 +1,7 @@
 import pygame
 from game_object import GameObject
 
+
 class ForceField(GameObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 100, game)
