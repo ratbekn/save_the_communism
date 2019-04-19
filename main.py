@@ -1,11 +1,14 @@
 from game import Game
 from player import Player
+
 from enemy import Enemy
 import random
 
+FIELD_WIDTH = 2048
+FIELD_HEIGHT = 2048
 
 def main():
-    game = Game('Save The Communism', 800, 600, "images/background.png", 60)
+    game = Game('Save The Communism', FIELD_WIDTH, FIELD_HEIGHT, "images/main_background.png", 60)
     player = Player(100, 100, 800, 600)
     player.setup_handlers(game.keydown_handlers, game.keyup_handlers)
     enemies = []
