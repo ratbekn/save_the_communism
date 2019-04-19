@@ -6,7 +6,6 @@ from game_object import GameObject
 class Player(GameObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 25, game)
-        print(game)
         self.x, self.y = x, y
         self.speed = 8
         self.dirs = {
