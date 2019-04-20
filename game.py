@@ -41,7 +41,6 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
-        self.sum_dx = 0
 
     def init(self):
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -108,14 +107,10 @@ class Game:
                     handler(event.type, event.pos)
 
     def change_camera_pos(self, dx, dy, x, y):
-        if (dx < 0):
-            dx = 0
-        self.sum_dx += dx
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if x < self.screen_width // 2 + self.sum_dx or x > self.width - self.screen_width // 2 - self.player.speed:
+        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2 - self.player.speed:
             ch_x = self.camera_pos[0]
-            self.sum_dx -= dx
         if y < self.screen_height // 2 or y > self.height - self.screen_height // 2 - self.player.speed:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
