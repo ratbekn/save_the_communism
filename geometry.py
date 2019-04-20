@@ -11,3 +11,6 @@ def get_vector(fr, to):
     dx = to[0] - fr[0]
     dy = to[1] - fr[1]
     return normalize_direction((dx, dy))
+
+def get_rotation_from_vector(x, y):
+    math.atan2()
