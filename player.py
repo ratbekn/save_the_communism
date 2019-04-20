@@ -9,7 +9,7 @@ import geometry
 
 class Player(MovableObject):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 25, game)
+        super().__init__(x, y, 40, game)
         self.x, self.y = x, y
         self.speed = 8
         self.dirs = {
@@ -20,7 +20,7 @@ class Player(MovableObject):
         }
         self.pressed = set()
         self.image = pygame.image.load('images/lenin.png')
-        self.image = pygame.transform.scale(self.image, (self.radius * 3, self.radius * 3))
+        self.image = pygame.transform.scale(self.image, (self.radius * 2, self.radius * 2))
         self.on_pos_changed = None
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
@@ -45,7 +45,8 @@ class Player(MovableObject):
 
         self.move_direction = geometry.normalize_direction((x, y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
-        self.on_pos_changed(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed), self.x, self.y)
+        if not self.collision:
+            self.on_pos_changed(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed), self.x, self.y)
 
     def on_released(self, key):
         self.pressed.remove(key)

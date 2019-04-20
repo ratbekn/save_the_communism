@@ -53,7 +53,7 @@ class Game:
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
         self.buildings = []
-        self.buildings.append(Building(300, 300, 30, self))
+        self.buildings.append(Building(300, 300, 50, self))
         self.objects.extend(self.buildings)
 
     def collide_with_building(self, x, y, r):

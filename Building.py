@@ -8,7 +8,9 @@ class Building(GameObject):
         super().__init__(x, y, size, game)
 
     def draw(self):
-        pygame.draw.rect(self.game.surface, pygame.Color('green'), (self.x, self.y, self.radius, self.radius))
+        pygame.draw.rect(self.game.surface, pygame.Color('green'), (self.x - self.radius, self.y - self.radius, self.radius*2, self.radius*2))
+        pygame.draw.circle(self.game.surface, pygame.Color('red'),
+                         (self.x, self.y),self.radius)
 
     def update(self):
         pass
