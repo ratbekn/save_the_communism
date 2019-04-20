@@ -7,6 +7,7 @@ import geometry
 from serp import Serp
 from bullet import Bullet
 from shooting_enemy import ShootingEnemy
+from SerpBonus import SerpBonus
 
 class Player(Hero):
     def __init__(self, x, y, game):
@@ -75,3 +76,5 @@ class Player(Hero):
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
+            if isinstance(object, SerpBonus):
+                self.bullets_cnt += 1

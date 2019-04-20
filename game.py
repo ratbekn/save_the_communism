@@ -12,6 +12,7 @@ from citizen import Citizen
 import pygame.camera
 from collections import defaultdict
 from geometry import *
+from generators import SerpGenerator, CitizenGenerator, EnemiesGenerator
 
 MAX_ENEMIES_COUNT = 7
 MAX_CITIZENS_COUNT = 3
@@ -41,6 +42,8 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.obj_generators = [SerpGenerator(300), CitizenGenerator(600)]
+        self.enemy_generator = EnemiesGenerator(150)
 
     def init(self):
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -129,6 +132,14 @@ class Game:
             self.objects = self.get_alive_objects(self.objects)
             self.enemies = self.get_alive_objects(self.enemies)
             self.fellows = self.get_alive_objects(self.fellows)
+            for generator in self.obj_generators:
+                obj = generator.try_generate(self)
+                if obj:
+                    self.objects.append(obj)
+            enemy = self.enemy_generator.try_generate(self)
+            if enemy:
+                self.objects.append(enemy)
+                self.enemies.append(enemy)
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
