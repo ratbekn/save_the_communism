@@ -5,7 +5,7 @@ from game_object import GameObject
 
 class Bullet(MovableObject):
     def __init__(self, x, y, dir_x, dir_y, game, not_touching, sprite=None):
-        super().__init__(x, y, 20, game)
+        super().__init__(x, y, 10, game)
         self.speed = 20
         self.move_direction = (dir_x, dir_y)
         self.not_touching = not_touching
