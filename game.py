@@ -16,6 +16,7 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 from generators import SerpGenerator, CitizenGenerator, EnemiesGenerator
+from boss import Boss
 
 MAX_ENEMIES_COUNT = 7
 MAX_CITIZENS_COUNT = 3
@@ -38,6 +39,8 @@ class Game:
         self.objects = []
         self.enemies = []
         self.fellows = []
+        self.boss = None # generated near urfu
+        self.is_boss_scene = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         pygame.font.init()
@@ -47,6 +50,7 @@ class Game:
         self.mouse_handlers = []
         self.obj_generators = [SerpGenerator(300), CitizenGenerator(600)]
         self.enemy_generator = EnemiesGenerator(150)
+        self.myfont = pygame.font.SysFont('Comic Sans MS', 100)
 
     def init(self):
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -67,6 +71,7 @@ class Game:
                         self.buildings.append(GreenBuilding(x, y, self))
                     if s == 'U':
                         self.buildings.append(UrfuBuilding(x, y, self))
+                        self.boss = Boss(x - 100, y, self)
                     x += Building.size * 2
                 x = 0
                 y += Building.size
@@ -100,16 +105,19 @@ class Game:
     def draw(self):
         for o in reversed(self.objects):
             o.draw()
-        textSurf = pygame.font.render('Health: {}'.format(self.player.xp), True, pygame.Color('red'))
-        self.display.blit(textSurf, textSurf.getRect())
 
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+                if not self.is_boss_scene:
+                    self.is_boss_scene = True
+                    self.objects.append(self.boss)
+                    self.enemies.append(self.boss)
 
-            if event.type == pygame.QUIT:
+            elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
@@ -145,17 +153,21 @@ class Game:
             self.objects = self.get_alive_objects(self.objects)
             self.enemies = self.get_alive_objects(self.enemies)
             self.fellows = self.get_alive_objects(self.fellows)
-            for generator in self.obj_generators:
-                obj = generator.try_generate(self)
-                if obj:
-                    self.objects.append(obj)
-            enemy = self.enemy_generator.try_generate(self)
-            if enemy:
-                self.objects.append(enemy)
-                self.enemies.append(enemy)
+            if not self.is_boss_scene:
+                self.apply_generators()
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
+
+    def apply_generators(self):
+        for generator in self.obj_generators:
+            obj = generator.try_generate(self)
+            if obj:
+                self.objects.append(obj)
+        enemy = self.enemy_generator.try_generate(self)
+        if enemy:
+            self.objects.append(enemy)
+            self.enemies.append(enemy)
 
     def get_alive_objects(self, objs):
         alive_objs = []
