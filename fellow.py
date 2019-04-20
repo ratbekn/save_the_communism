@@ -1,7 +1,7 @@
 from game_object import GameObject
 import pygame
 from geometry import *
-import geometry
+from died_man import DiedMan
 from bullet import Bullet
 from heroes import Hero
 
@@ -78,14 +78,20 @@ class Fellow(Hero):
 
         for object in coll_objects:
             if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
-                self.is_alive = False
+                self.die()
             if isinstance(object, Bullet) and Fellow not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
-                    self.is_alive = False
+                    self.die()
 
     def is_enemy_near(self):
         for enemy in self.game.enemies:
             if self.game.is_inside_screen(enemy):
                 return True
         return False
+
+    def die(self):
+        self.is_alive = False
+        self.game.enemy_death3.play()
+        died = DiedMan(self.x, self.y, self.radius, self.game, r'images\красноармеец сдох.png')
+        self.game.objects.append(died)

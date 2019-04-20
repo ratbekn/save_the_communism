@@ -1,16 +1,14 @@
 import pygame
 import sys
 import random
-import math
-
 import lives
+from enemy import Enemy
 from Building import Building
 from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
 from high_building import HighBuilding
 from main_building import MainBuilding
 from player import Player
-from enemy import Enemy
 from shooting_enemy import ShootingEnemy
 from collision import CollisionsResolver
 from citizen import Citizen
@@ -24,6 +22,7 @@ MAX_ENEMIES_COUNT = 7
 MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
+
 
 class Game:
     def __init__(self,
@@ -50,6 +49,7 @@ class Game:
         self.is_quit = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.display.set_caption(caption)
+        self.import_sounds()
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
@@ -68,6 +68,9 @@ class Game:
         self.objects.clear()
         self.enemies.clear()
         self.fellows.clear()
+        if self.boss is not None:
+            self.boss.game = None
+        self.boss = None
         with open('Map/map.txt', 'r') as f:
             x = 0
             y = 0
@@ -81,7 +84,7 @@ class Game:
                         self.buildings.append(GreenBuilding(x, y, self))
                     if s == 'U':
                         self.buildings.append(UrfuBuilding(x, y, self))
-                        self.boss = Boss(x - 100, y, self)
+                        self.boss = Boss(x - 200, y - 200, self)
                     x += Building.size * 2
                 x = 0
                 y += Building.size
@@ -93,8 +96,8 @@ class Game:
         self.mouse_handlers.clear()
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
 
-        # for i in range(MAX_ENEMIES_COUNT // 2):
-        # self.enemies.append(self.create_hero(Enemy))
+        for i in range(MAX_ENEMIES_COUNT // 2):
+            self.enemies.append(self.create_hero(Enemy))
         for i in range(MAX_ENEMIES_COUNT // 2):
             self.enemies.append(self.create_hero(ShootingEnemy))
         self.objects.append(Citizen(150, 250, self))
@@ -115,7 +118,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in self.objects:
+        for o in reversed(self.objects):
             o.draw()
 
     def handle_events(self):
@@ -123,11 +126,9 @@ class Game:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
-                if not self.is_boss_scene:
-                    self.is_boss_scene = True
-                    self.objects.append(self.boss)
-                    self.enemies.append(self.boss)
+            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+            #     self.objects.append(self.boss)
+            #     self.enemies.append(self.boss)
 
             elif event.type == pygame.QUIT:
                 pygame.quit()
@@ -153,12 +154,48 @@ class Game:
 
     def start(self):
         self.started = True
+        self.rip_sound.stop()
+        pygame.mixer_music.play()
 
     def quit(self):
         pygame.quit()
         sys.exit()
 
+    def show_intro(self):
+        image = pygame.image.load('images/lenin/lenin' + str(0) + '.png')
+        image = pygame.transform.scale(image, (1366, 768))
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(1500)
+        image = pygame.image.load('images/lenin/lenin' + str(1) + '.png')
+        image = pygame.transform.scale(image, (1366, 768))
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(2000)
+        for i in range(2, 6):
+            image = pygame.image.load('images/lenin/lenin' + str(i) + '.png')
+            image = pygame.transform.scale(image,(1366, 768))
+            self.display.blit(image, (0, 0))
+            pygame.display.update()
+            pygame.time.delay(500)
+        image = pygame.image.load('images/lenin/lenin' + str(6) + '.png')
+        image = pygame.transform.scale(image, (1366, 768))
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(2500)
+        image = pygame.image.load('images/lenin/lenin' + str(7) + '.png')
+        image = pygame.transform.scale(image, (1366, 768))
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(2000)
+        image = pygame.image.load('images/lenin/lenin' + str(8) + '.png')
+        image = pygame.transform.scale(image, (1366, 768))
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(2000)
+
     def run(self):
+        self.show_intro()
         self.game_over_menu.start_button.add_click_handler(self.start)
         self.game_over_menu.quit_button.add_click_handler(self.quit)
         self.game_over_menu.setup()
@@ -166,7 +203,7 @@ class Game:
             self.started = False
             while not self.started:
                 self.game_over_menu.run(self.display)
-
+            self.is_boss = False
             self.init()
             while not self.game_over:
                 for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
@@ -178,6 +215,11 @@ class Game:
 
                 self.display.blit(self.surface, self.camera_pos)
                 self.ui.draw()
+
+                if (self.player.score >= 10) and self.is_boss == False:
+                    self.is_boss = True
+                    self.objects.append(self.boss)
+                    self.enemies.append(self.boss)
 
                 CollisionsResolver.resolve_collisions(self.objects)
 
@@ -194,6 +236,9 @@ class Game:
                     self.enemies.append(enemy)
                 if not self.player.is_alive:
                     self.game_over = True
+                if not self.boss.is_alive:
+                    self.game_over = True
+                    self.show_win()
                 pygame.display.update()
                 self.clock.tick(self.frame_rate)
 
@@ -205,6 +250,12 @@ class Game:
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
+
+    def show_win(self):
+        image = pygame.image.load('images/win.png').convert()
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(10000)
 
     def apply_generators(self):
         for generator in self.obj_generators:
@@ -237,3 +288,17 @@ class Game:
             if calculate_distance((x, y), (o.x, o.y)) < o.radius * 2:
                 return self.create_hero(cls)
         return cls(x, y, self)
+
+    def import_sounds(self):
+        pygame.mixer_music.load(r"sounds\Моя оборона 2.mp3")
+        pygame.mixer_music.set_volume(0.2)
+        pygame.mixer_music.play(10)
+        self.rip_sound = pygame.mixer.Sound(r'sounds\rip.wav')
+        self.rip_sound.set_volume(1)
+        self.attack_sound = pygame.mixer.Sound(r'sounds\attack.ogg')
+        self.attack_sound.set_volume(1)
+        self.boss_sound = pygame.mixer.Sound(r'sounds\boss.ogg')
+        self.enemy_death1 = pygame.mixer.Sound(r'sounds\enemy_death1.ogg')
+        self.enemy_death2 = pygame.mixer.Sound(r'sounds\enemy_death2.ogg')
+        self.enemy_death3 = pygame.mixer.Sound(r'sounds\enemy_death3.ogg')
+

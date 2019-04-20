@@ -9,7 +9,9 @@ class Lives(GameObject):
         self.font = pygame.font.SysFont('Verdana', 20)
 
     def draw(self):
-        text_surface = self.font.render("XP: " + str(self.game.player.xp), True, (255, 0, 0))
+        text_surface = self.font.render("XP: " + str(self.game.player.xp), True, (255, 255, 0))
         self.game.display.blit(text_surface, (10, 10))
-        text_surface = self.font.render("Bullets: " + str(self.game.player.bullets_cnt), True, (255, 0, 0))
+        text_surface = self.font.render("Bullets: " + str(self.game.player.bullets_cnt), True, (255, 255, 0))
         self.game.display.blit(text_surface, (10, 30))
+        text_surface = self.font.render("Score: " + str(self.game.player.score), True, (255, 255, 0))
+        self.game.display.blit(text_surface, (10, 50))
