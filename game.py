@@ -12,7 +12,8 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 3
+MAX_ENEMIES_COUNT = 7
+MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
@@ -78,7 +79,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in self.objects:
+        for o in reversed(self.objects):
             o.draw()
 
     def handle_events(self):
@@ -96,9 +97,7 @@ class Game:
             elif event.type == pygame.KEYUP:
                 for handler in self.keyup_handlers[event.key]:
                     handler(event.key)
-            elif event.type in (pygame.MOUSEBUTTONDOWN,
-                                pygame.MOUSEBUTTONUP,
-                                pygame.MOUSEMOTION):
+            elif event.type in (pygame.MOUSEBUTTONDOWN,):
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
