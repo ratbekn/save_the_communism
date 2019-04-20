@@ -97,6 +97,8 @@ class Game:
     def draw(self):
         for o in reversed(self.objects):
             o.draw()
+        textSurf = pygame.font.render('Health: {}'.format(self.player.xp), True, pygame.Color('red'))
+        self.display.blit(textSurf, textSurf.getRect())
 
     def handle_events(self):
         for event in pygame.event.get():
