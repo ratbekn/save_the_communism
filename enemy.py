@@ -18,8 +18,6 @@ class Enemy(Hero):
         if not self.game.player.is_alive:
             return
         self.orientate_to(self.game.player.x, self.game.player.y)
-        #self.rotation_vector = get_vector(
-        #    (self.x, self.y), (self.game.player.x, self.game.player.y))
         self.choose_direction()
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed

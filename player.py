@@ -4,7 +4,7 @@ from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
-from bullet import Bullet
+from serp import Serp
 
 
 class Player(Hero):
@@ -36,12 +36,9 @@ class Player(Hero):
         from fellow import Fellow
         if self.bullets_cnt > 0:
             self.bullets_cnt -= 1
-            bullet = Bullet(self.x, self.y,
+            bullet = Serp(self.x, self.y,
                             self.rotation_vector[0], self.rotation_vector[1],
                             self.game, [Player, Fellow])
-
-            bullet.radius = 20
-            bullet.speed = 20
             self.game.objects.append(bullet)
 
     def update(self):
