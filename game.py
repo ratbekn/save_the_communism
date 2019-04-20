@@ -23,6 +23,7 @@ MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
+
 class Game:
     def __init__(self,
                  caption,
@@ -32,16 +33,23 @@ class Game:
         self.width = width
         self.height = height
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.surface = pygame.Surface((self.width, self.height))
         self.background_image = pygame.image.load(back_image_filename).convert()
-        self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
+        self.background_image = pygame.transform.scale(self.background_image,
+                                                       (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
         self.game_over = False
-        self.boss = None # generated near urfu
+        self.buildings = []
+        self.objects = []
+        self.enemies = []
+        self.fellows = []
+        self.boss = None  # generated near urfu
         self.is_boss_scene = False
         self.started = False
         self.is_quit = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.display.set_caption(caption)
+        self.player = Player(150, 150, self)
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
@@ -56,10 +64,10 @@ class Game:
         self.surface = pygame.Surface((self.width, self.height))
         self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
         self.clock = pygame.time.Clock()
-        self.buildings = []
-        self.objects = []
-        self.enemies = []
-        self.fellows = []
+        self.buildings.clear()
+        self.objects.clear()
+        self.enemies.clear()
+        self.fellows.clear()
         with open('Map/map.txt', 'r') as f:
             x = 0
             y = 0
@@ -77,14 +85,18 @@ class Game:
                     x += Building.size * 2
                 x = 0
                 y += Building.size
+        self.player.game = None
+        self.player = None
         self.player = Player(150, 150, self)
         self.objects.append(self.player)
         self.objects.extend(self.buildings)
-
+        self.keydown_handlers.clear()
+        self.keyup_handlers.clear()
+        self.mouse_handlers.clear()
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
 
         # for i in range(MAX_ENEMIES_COUNT // 2):
-            # self.enemies.append(self.create_hero(Enemy))
+        # self.enemies.append(self.create_hero(Enemy))
         for i in range(MAX_ENEMIES_COUNT // 2):
             self.enemies.append(self.create_hero(ShootingEnemy))
         self.objects.append(Citizen(150, 250, self))
@@ -92,7 +104,6 @@ class Game:
             self.objects.append(self.create_hero(Citizen))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
-
 
     def collide_with_building(self, x, y, r):
         for building in self.buildings:
@@ -213,7 +224,7 @@ class Game:
 
     def is_inside_screen(self, object):
         return (0 <= object.x + self.camera_pos[0] and object.x + self.camera_pos[0] <= self.screen_width and
-            0 <= object.y + self.camera_pos[1] and object.y + self.camera_pos[1] <= self.screen_height)
+                0 <= object.y + self.camera_pos[1] and object.y + self.camera_pos[1] <= self.screen_height)
 
     def create_hero(self, cls):
         x, y = 0, 0

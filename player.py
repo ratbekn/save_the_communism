@@ -13,7 +13,7 @@ class Player(Hero):
     def __init__(self, x, y, game):
         super().__init__(x, y, 45, game, 'images/lenin.png')
         self.x, self.y = x, y
-        self.speed = 17
+        self.speed = 19
         self.dirs = {
             pygame.K_a: (-1, 0),
             pygame.K_d: (1, 0),
@@ -22,7 +22,7 @@ class Player(Hero):
         }
         self.pressed = set()
         self.on_pos_changed = None
-        self.bullets_cnt = 3
+        self.bullets_cnt = 30
         self.radius = 35
         self.xp = 10
 
@@ -78,4 +78,4 @@ class Player(Hero):
                 if self.xp <= 0:
                     self.is_alive = False
             if isinstance(object, SerpBonus):
-                self.bullets_cnt += 1
+                self.bullets_cnt += 5
