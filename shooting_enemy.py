@@ -49,11 +49,13 @@ class ShootingEnemy(Hero):
             if isinstance(object, Serp):
                 self.is_alive = False
                 self.game.player.score += 2
+                self.game.enemy_death2.play()
             if isinstance(object, Bullet) and type(self) not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
                     self.game.player.score += 2
+                    self.game.enemy_death2.play()
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:
