@@ -26,21 +26,17 @@ class Game:
     def __init__(self,
                  caption,
                  back_image_filename,
-                 frame_rate, width, height):
+                 frame_rate, width, height, main_menu):
+        self.game_over_menu = main_menu
         self.width = width
         self.height = height
-        self.camera_pos = 0, 0
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.background_image = pygame.image.load(back_image_filename).convert()
         self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
-        self.game_over = False
-        self.objects = []
-        self.enemies = []
-        self.fellows = []
+        self.started = False
+        self.is_quit = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
-        pygame.init()
-        pygame.font.init()
         pygame.display.set_caption(caption)
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
@@ -49,11 +45,16 @@ class Game:
         self.enemy_generator = EnemiesGenerator(150)
 
     def init(self):
+        self.camera_pos = 0, 0
+        self.game_over = False
         self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.surface = pygame.Surface((self.width, self.height))
         self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
         self.clock = pygame.time.Clock()
         self.buildings = []
+        self.objects = []
+        self.enemies = []
+        self.fellows = []
         with open('Map/map.txt', 'r') as f:
             x = 0
             y = 0
@@ -129,31 +130,49 @@ class Game:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
 
+    def start(self):
+        self.started = True
+
+    def quit(self):
+        pygame.quit()
+        sys.exit()
+
     def run(self):
-        while not self.game_over:
-            for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
-                for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
-                    self.surface.blit(self.background_image, (x, y))
-            self.handle_events()
-            self.update()
-            self.draw()
-            self.display.blit(self.surface, self.camera_pos)
-            CollisionsResolver.resolve_collisions(self.objects)
+        self.game_over_menu.start_button.add_click_handler(self.start)
+        self.game_over_menu.quit_button.add_click_handler(self.quit)
+        self.game_over_menu.setup()
+        while True:
+            self.started = False
+            while not self.started:
+                self.game_over_menu.run(self.display)
 
-            self.objects = self.get_alive_objects(self.objects)
-            self.enemies = self.get_alive_objects(self.enemies)
-            self.fellows = self.get_alive_objects(self.fellows)
-            for generator in self.obj_generators:
-                obj = generator.try_generate(self)
-                if obj:
-                    self.objects.append(obj)
-            enemy = self.enemy_generator.try_generate(self)
-            if enemy:
-                self.objects.append(enemy)
-                self.enemies.append(enemy)
+            self.init()
+            while not self.game_over:
+                for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
+                    for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
+                        self.surface.blit(self.background_image, (x, y))
+                self.handle_events()
+                self.update()
+                self.draw()
 
-            pygame.display.update()
-            self.clock.tick(self.frame_rate)
+                self.display.blit(self.surface, self.camera_pos)
+                CollisionsResolver.resolve_collisions(self.objects)
+
+                self.objects = self.get_alive_objects(self.objects)
+                self.enemies = self.get_alive_objects(self.enemies)
+                self.fellows = self.get_alive_objects(self.fellows)
+                for generator in self.obj_generators:
+                    obj = generator.try_generate(self)
+                    if obj:
+                        self.objects.append(obj)
+                enemy = self.enemy_generator.try_generate(self)
+                if enemy:
+                    self.objects.append(enemy)
+                    self.enemies.append(enemy)
+                if not self.player.is_alive:
+                    self.game_over = True
+                pygame.display.update()
+                self.clock.tick(self.frame_rate)
 
     def get_alive_objects(self, objs):
         alive_objs = []
