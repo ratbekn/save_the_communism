@@ -1,7 +1,7 @@
 from game import Game
 
 
-FIELD_WIDTH = 5500
+FIELD_WIDTH = 6000
 FIELD_HEIGHT = 1024
 
 def main():

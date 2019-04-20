@@ -13,7 +13,6 @@ class Building(GameObject):
 
     def draw(self):
         self.game.surface.blit(self.image, (self.x - self.im_width, self.y - self.im_height))
-        # pygame.draw.circle(self.game.surface, pygame.Color('green'), (self.x, self.y), self.radius)
 
     def update(self):
         pass

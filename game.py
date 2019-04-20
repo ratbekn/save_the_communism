@@ -2,7 +2,6 @@ import pygame
 import sys
 import random
 import math
-
 from Building import Building
 from main_building import MainBuilding
 from player import Player
@@ -13,7 +12,8 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 3
+MAX_ENEMIES_COUNT = 7
+MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
@@ -56,16 +56,17 @@ class Game:
                         self.buildings.append(MainBuilding(x, y, self))
                     x += MainBuilding.size * 2
                 x = 0
-                y += MainBuilding.size
+                y +=MainBuilding.size
         self.objects.extend(self.buildings)
         self.player = Player(150, 150, self)
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
+        self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
             self.enemies.append(self.create_hero(Enemy))
-        self.objects.append(Citizen(950, 300, self))
+        self.objects.append(Citizen(150, 250, self))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
-        self.objects.append(self.player)
+
 
     def collide_with_building(self, x, y, r):
         for building in self.buildings:
@@ -78,7 +79,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in self.objects:
+        for o in reversed(self.objects):
             o.draw()
 
     def handle_events(self):
@@ -96,9 +97,7 @@ class Game:
             elif event.type == pygame.KEYUP:
                 for handler in self.keyup_handlers[event.key]:
                     handler(event.key)
-            elif event.type in (pygame.MOUSEBUTTONDOWN,
-                                pygame.MOUSEBUTTONUP,
-                                pygame.MOUSEMOTION):
+            elif event.type in (pygame.MOUSEBUTTONDOWN,):
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
