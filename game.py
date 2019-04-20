@@ -1,5 +1,13 @@
 import pygame
 import sys
+import random
+import math
+from player import Player
+from enemy import Enemy
+
+
+MAX_ENEMIES_COUNT = 7
+MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 import pygame.camera
 
 from collections import defaultdict
@@ -9,23 +17,24 @@ BACKGROUND_IMAGE_SIZE = 128
 class Game:
     def __init__(self,
                  caption,
-                 width,
-                 height,
                  back_image_filename,
-                 frame_rate):
-        self.height = height
+                 frame_rate, width, height):
         self.width = width
+        self.height = height
+        self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.surface = pygame.Surface((self.width, self.height))
+        self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
+        self.camera_pos = 0, 0
         self.background_image = pygame.image.load(back_image_filename)
-        self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
+        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
+        self.player = Player(100, 100, self)
+        self.enemies = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         pygame.font.init()
-        # pygame.camera.init()
-        self.surface = pygame.display.set_mode((800, 600))
-        # self.clist = pygame.camera.list_cameras()
         pygame.display.set_caption(caption)
         self.clock = pygame.time.Clock()
         self.keydown_handlers = defaultdict(list)
@@ -38,10 +47,14 @@ class Game:
 
     def draw(self):
         for o in self.objects:
-            o.draw(self.surface)
+            o.draw()
 
     def handle_events(self):
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -57,15 +70,44 @@ class Game:
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
-    def run(self):
-        while not self.game_over:
-            for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
-                for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
-                    self.surface.blit(self.background_image, (x, y))
+    def change_camera_pos(self, dx, dy, x, y):
+        ch_x = self.camera_pos[0] - dx
+        ch_y = self.camera_pos[1] - dy
+        if (x < self.screen_width // 2 or x > self.width - self.screen_width // 2):
+            ch_x = self.camera_pos[0]
+        if (y < self.screen_height // 2 or y > self.height - self.screen_height // 2):
+            ch_y = self.camera_pos[1]
+        self.camera_pos = ch_x, ch_y
 
+    def run(self):
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.objects.append(self.player)
+        for i in range(MAX_ENEMIES_COUNT):
+            self.enemies.append(self.create_enemy())
+        self.objects.extend(self.enemies)
+        self.player.on_pos_changed = self.change_camera_pos
+
+        while not self.game_over:
+            # camera_pos = self.player.move(camera_pos)
+            # self.display.fill((0,0,0))
+            # for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
+                # for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
+            self.surface.blit(self.background_image, (0, 0))
             self.handle_events()
             self.update()
             self.draw()
+            self.display.blit(self.surface, self.camera_pos)
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
+
+    def create_enemy(self):
+        x = random.randrange(self.surface.get_height())
+        while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
+            x = random.randrange(self.surface.get_height())
+
+        y = random.randrange(self.surface.get_width())
+        while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
+            y = random.randrange(self.surface.get_width())
+
+        return Enemy(x, y, self)
