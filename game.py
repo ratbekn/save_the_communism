@@ -1,6 +1,9 @@
 import pygame
 import sys
 import random
+import math
+from Building import Building
+from main_building import MainBuilding
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -9,8 +12,8 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 10
-MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 300
+MAX_ENEMIES_COUNT = 3
+MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
 class Game:
@@ -29,7 +32,6 @@ class Game:
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        self.player = Player(100, 100, self)
         self.enemies = []
         self.fellows = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
@@ -40,6 +42,35 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.sum_dx = 0
+
+    def init(self):
+        self.player = Player(150, 150, self)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.objects.append(self.player)
+        for i in range(MAX_ENEMIES_COUNT):
+            self.enemies.append(self.create_enemy())
+        self.objects.append(Citizen(150, 250, self))
+        self.objects.extend(self.enemies)
+        self.player.on_pos_changed = self.change_camera_pos
+        self.buildings = []
+        with open('Map/map.txt', 'r') as f:
+            x = 0
+            y = 0
+            for line in f.readlines():
+                for s in line:
+                    if s == '#':
+                        self.buildings.append(MainBuilding(x, y, self))
+                    x += MainBuilding.size *2
+                x = 0
+                y +=MainBuilding.size
+        self.objects.extend(self.buildings)
+
+    def collide_with_building(self, x, y, r):
+        for building in self.buildings:
+            if CollisionsResolver.are_collided(building, x, y, r):
+                return True
+        return False
 
     def update(self):
         for o in self.objects:
@@ -71,25 +102,20 @@ class Game:
                     handler(event.type, event.pos)
 
     def change_camera_pos(self, dx, dy, x, y):
+        if (dx < 0):
+            dx = 0
+        self.sum_dx += dx
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2 - self.player.speed:
+        if x < self.screen_width // 2 + self.sum_dx or x > self.width - self.screen_width // 2 - self.player.speed:
             ch_x = self.camera_pos[0]
+            self.sum_dx -= dx
         if y < self.screen_height // 2 or y > self.height - self.screen_height // 2 - self.player.speed:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
 
     def run(self):
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
-        self.objects.append(self.player)
-        for i in range(MAX_ENEMIES_COUNT):
-            self.enemies.append(self.create_enemy())
-            self.objects.append(self.create_citizen())
-        self.objects.extend(self.enemies)
-
-        self.player.on_pos_changed = self.change_camera_pos
-
-        while self.player.is_alive:
+        while not self.game_over:
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
                 for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
                     self.surface.blit(self.background_image, (x, y))
@@ -113,28 +139,13 @@ class Game:
                 alive_objs.append(obj)
         return alive_objs
 
-    def create_enemy(self):
-        x = random.randrange(self.surface.get_height())
-        while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            x = random.randrange(self.surface.get_height())
+    def create_hero(self, cls):
+        x, y = 0, 0
+        while x < self.screen_width and y < self.screen_height:
+            x = random.randrange(self.width)
+            y = random.randrange(self.height)
 
-        y = random.randrange(self.surface.get_width())
-        while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            y = random.randrange(self.surface.get_width())
-        for e in self.enemies:
-            if calculate_distance((x, y), (e.x, e.y)) < e.radius * 2:
-                return self.create_enemy()
-        return Enemy(x, y, self)
-
-    def create_citizen(self):
-        x = random.randrange(self.surface.get_height())
-        while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            x = random.randrange(self.surface.get_height())
-
-        y = random.randrange(self.surface.get_width())
-        while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            y = random.randrange(self.surface.get_width())
-        for e in self.enemies:
-            if calculate_distance((x, y), (e.x, e.y)) < e.radius * 2:
-                return self.create_enemy()
-        return Citizen(x, y, self)
+        for o in self.objects:
+            if calculate_distance((x, y), (o.x, o.y)) < o.radius * 2:
+                return self.create_hero(cls)
+        return cls(x, y, self)

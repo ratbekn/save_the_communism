@@ -31,7 +31,8 @@ class Player(Hero):
 
     def update(self):
         x, y = 0, 0
-        self.orientate_to(*pygame.mouse.get_pos())
+        pos = pygame.mouse.get_pos()
+        self.orientate_to(pos[0] - self.game.camera_pos[0], pos[1] - self.game.camera_pos[1])
         #self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
@@ -40,12 +41,14 @@ class Player(Hero):
 
         self.move_direction = geometry.normalize_direction((x, y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
-        self.on_pos_changed(
-            int(self.move_direction[0] * self.speed),
-            int(self.move_direction[1] * self.speed), self.x, self.y)
+        if not self.collision:
+            self.on_pos_changed(
+                int(self.move_direction[0] * self.speed),
+                int(self.move_direction[1] * self.speed), self.x, self.y)
 
     def on_released(self, key):
-        self.pressed.remove(key)
+        if key in self.pressed:
+            self.pressed.remove(key)
 
     def on_pressed(self, key):
         self.pressed.add(key)
