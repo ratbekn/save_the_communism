@@ -2,8 +2,9 @@ from heroes import Hero
 from bullet import Bullet
 from enemy import Enemy
 from serp import Serp
-from fellow import Fellow
+from died_man import DiedMan
 from geometry import *
+
 
 class ShootingEnemy(Hero):
     def __init__(self, x, y, game):
@@ -31,9 +32,6 @@ class ShootingEnemy(Hero):
             self.shoot_after -= 1
 
     def shoot(self):
-        from player import Player
-
-
         bullet = Bullet(
                 self.x, self.y,
                 self.rotation_vector[0], self.rotation_vector[1], self.game, [Enemy, ShootingEnemy], 'images/bottile.png')
@@ -46,13 +44,11 @@ class ShootingEnemy(Hero):
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
             if isinstance(object, Serp):
-                self.is_alive = False
-                self.game.enemy_death2.play()
+                self.die()
             if isinstance(object, Bullet) and type(self) not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
-                    self.is_alive = False
-                    self.game.enemy_death2.play()
+                    self.die()
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:
@@ -60,3 +56,9 @@ class ShootingEnemy(Hero):
                 if calculate_distance((self.x + dx, self.y + dy), (enemy.x, enemy.y)) < enemy.radius * 2:
                     return 0, 0
         return dx, dy
+
+    def die(self):
+        self.is_alive = False
+        self.game.enemy_death2.play()
+        died = DiedMan(self.x, self.y, self.radius, self.game, r'images\гопник сдох.png')
+        self.game.objects.append(died)

@@ -73,14 +73,15 @@ class Player(Hero):
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
             if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
-                self.is_alive = False
-                pygame.mixer_music.stop()
-                self.game.rip_sound.play()
+                self.die()
             if isinstance(object, Bullet) and Player not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
-                    self.is_alive = False
-                    pygame.mixer_music.stop()
-                    self.game.rip_sound.play()
+                    self.die()
             if isinstance(object, SerpBonus):
                 self.bullets_cnt += 5
+
+    def die(self):
+        self.is_alive = False
+        pygame.mixer_music.stop()
+        self.game.rip_sound.play()
