@@ -1,6 +1,7 @@
 import pygame
 from game_object import GameObject
 
+
 class Bullet(GameObject):
     def __init__(self, x, y, dir_x, dir_y, game, owner):
         super().__init__(x, y, 5, game)

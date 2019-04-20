@@ -65,7 +65,6 @@ class Fellow(Hero):
     def _get_distance_to(self, object):
         return math.sqrt((self.x - object.x) ** 2 + (self.y - object.y) ** 2)
 
-
     def handle_collisions(self, coll_objects):
         from enemy import Enemy
         for object in coll_objects:
