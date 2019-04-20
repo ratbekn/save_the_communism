@@ -4,6 +4,7 @@ from MovableObject import MovableObject
 from game_object import GameObject
 import geometry
 
+
 class Hero(MovableObject):
     def __init__(self, x, y, radius, game, image_path):
         super().__init__(x, y, radius, game)
