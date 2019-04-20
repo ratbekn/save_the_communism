@@ -7,7 +7,7 @@ from heroes import Hero
 
 class Citizen(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 20, game, 'images/citizen.png')
+        super().__init__(x, y, 45, game, 'images/citizen.png')
 
     def update(self):
         pass

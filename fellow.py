@@ -8,7 +8,7 @@ from heroes import Hero
 
 class Fellow(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 20, game, 'images/citizen.png')
+        super().__init__(x, y, 45, game, 'images/citizen.png')
         self.shot_delay = 10
         self.shoot_after = self.shot_delay
 
@@ -17,8 +17,9 @@ class Fellow(Hero):
             return
 
         nearest = self._get_nearest_enemy()
-        self.rotation_vector = get_vector(
-            (self.x, self.y), (nearest.x, nearest.y))
+        self.orientate_to(nearest.x, nearest.y)
+        #self.rotation_vector = get_vector(
+        #    (self.x, self.y), (nearest.x, nearest.y))
         self.move_direction = geometry.get_vector(
             (self.x, self.y), (nearest.x, nearest.y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))

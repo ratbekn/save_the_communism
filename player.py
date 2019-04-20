@@ -8,7 +8,7 @@ import geometry
 
 class Player(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 25, game, 'images/lenin.png')
+        super().__init__(x, y, 45, game, 'images/lenin.png')
         self.x, self.y = x, y
         self.speed = 8
         self.dirs = {
@@ -31,7 +31,8 @@ class Player(Hero):
 
     def update(self):
         x, y = 0, 0
-        self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
+        self.orientate_to(*pygame.mouse.get_pos())
+        #self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
             x += self.dirs[key][0]

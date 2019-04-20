@@ -20,3 +20,14 @@ def calculate_distance(first_obj, second_obj):
 def get_rotation_from_vector(x, y):
     return math.degrees(math.atan2(-y, x) - math.pi / 2)
 
+
+def are_close(first, second):
+    eps = 0.1
+
+    if first == (0, 0) or second == (0, 0):
+        return False
+
+    return (first[0] * second[0] + first[1] * second[1]) / (vector_len(*first) * vector_len(*second)) >= 1 - eps
+
+def vector_len(x, y):
+    return math.sqrt(x ** 2 + y ** 2)
