@@ -14,7 +14,7 @@ class Enemy(Hero):
         self.x = x
         self.y = y
         self.xp = 3
-        self.speed = 11
+        self.speed = 9
 
     def update(self):
         if not self.game.player.is_alive:
@@ -34,10 +34,12 @@ class Enemy(Hero):
         for object in coll_objects:
             if isinstance(object, Serp):
                 self.is_alive = False
+                self.game.player.score += 1
             if isinstance(object, Bullet):
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
+                    self.game.player.score += 1
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:

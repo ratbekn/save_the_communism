@@ -1,6 +1,8 @@
 import pygame
 import sys
 import random
+import lives
+from enemy import Enemy
 from Building import Building
 from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
@@ -66,6 +68,9 @@ class Game:
         self.objects.clear()
         self.enemies.clear()
         self.fellows.clear()
+        if self.boss is not None:
+            self.boss.game = None
+        self.boss = None
         with open('Map/map.txt', 'r') as f:
             x = 0
             y = 0
@@ -79,7 +84,7 @@ class Game:
                         self.buildings.append(GreenBuilding(x, y, self))
                     if s == 'U':
                         self.buildings.append(UrfuBuilding(x, y, self))
-                        self.boss = Boss(x - 100, y, self)
+                        self.boss = Boss(x - 200, y - 200, self)
                     x += Building.size * 2
                 x = 0
                 y += Building.size
@@ -91,8 +96,8 @@ class Game:
         self.mouse_handlers.clear()
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
 
-        # for i in range(MAX_ENEMIES_COUNT // 2):
-        # self.enemies.append(self.create_hero(Enemy))
+        for i in range(MAX_ENEMIES_COUNT // 2):
+            self.enemies.append(self.create_hero(Enemy))
         for i in range(MAX_ENEMIES_COUNT // 2):
             self.enemies.append(self.create_hero(ShootingEnemy))
         self.objects.append(Citizen(150, 250, self))
@@ -100,6 +105,7 @@ class Game:
             self.objects.append(self.create_hero(Citizen))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
+        self.ui = lives.Lives(10, 10, self)
 
     def collide_with_building(self, x, y, r):
         for building in self.buildings:
@@ -112,7 +118,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in reversed(self.objects):
+        for o in self.objects:
             o.draw()
 
     def handle_events(self):
@@ -121,10 +127,8 @@ class Game:
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
-                if not self.is_boss_scene:
-                    self.is_boss_scene = True
-                    self.objects.append(self.boss)
-                    self.enemies.append(self.boss)
+                self.objects.append(self.boss)
+                self.enemies.append(self.boss)
 
             elif event.type == pygame.QUIT:
                 pygame.quit()
@@ -176,6 +180,8 @@ class Game:
                 self.draw()
 
                 self.display.blit(self.surface, self.camera_pos)
+                self.ui.draw()
+
                 CollisionsResolver.resolve_collisions(self.objects)
 
                 self.objects = self.get_alive_objects(self.objects)

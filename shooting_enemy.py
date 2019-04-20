@@ -13,6 +13,7 @@ class ShootingEnemy(Hero):
         self.xp = 10
         self.shot_delay = 40
         self.shoot_after = self.shot_delay
+        self.speed = 9
 
     def update(self):
         if not self.game.player.is_alive:
@@ -47,10 +48,12 @@ class ShootingEnemy(Hero):
         for object in coll_objects:
             if isinstance(object, Serp):
                 self.is_alive = False
+                self.game.player.score += 2
             if isinstance(object, Bullet) and type(self) not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
+                    self.game.player.score += 2
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:
