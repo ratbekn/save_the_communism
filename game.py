@@ -6,6 +6,7 @@ from Building import Building
 from main_building import MainBuilding
 from player import Player
 from enemy import Enemy
+from shooting_enemy import ShootingEnemy
 from collision import CollisionsResolver
 from citizen import Citizen
 import pygame.camera
@@ -61,9 +62,13 @@ class Game:
         self.player = Player(150, 150, self)
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
         self.objects.append(self.player)
-        for i in range(MAX_ENEMIES_COUNT):
+        for i in range(MAX_ENEMIES_COUNT // 2):
             self.enemies.append(self.create_hero(Enemy))
+        for i in range(MAX_ENEMIES_COUNT // 2):
+            self.enemies.append(self.create_hero(ShootingEnemy))
         self.objects.append(Citizen(150, 250, self))
+        for i in range(MAX_CITIZENS_COUNT):
+            self.objects.append(self.create_hero(Citizen))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
 

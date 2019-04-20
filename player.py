@@ -5,7 +5,8 @@ from force_field import ForceField
 from enemy import Enemy
 import geometry
 from serp import Serp
-
+from bullet import Bullet
+from shooting_enemy import ShootingEnemy
 
 class Player(Hero):
     def __init__(self, x, y, game):
@@ -21,6 +22,7 @@ class Player(Hero):
         self.pressed = set()
         self.on_pos_changed = None
         self.bullets_cnt = 3
+        self.xp = 10
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict, mouse_handlers):
         for key in self.dirs:
@@ -67,5 +69,9 @@ class Player(Hero):
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
-            if isinstance(object, Enemy):
+            if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
                 self.is_alive = False
+            if isinstance(object, Bullet) and Player not in object.not_touching:
+                self.xp -= 2
+                if self.xp <= 0:
+                    self.is_alive = False

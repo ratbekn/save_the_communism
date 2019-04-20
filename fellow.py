@@ -5,11 +5,13 @@ import geometry
 from bullet import Bullet
 from heroes import Hero
 
+
 class Fellow(Hero):
     def __init__(self, x, y, game):
         super().__init__(x, y, 45, game, 'images/fellow.png')
         self.shot_delay = 20
         self.shoot_after = self.shot_delay
+        self.xp = 10
 
     def update(self):
         self.follow_player()
@@ -72,9 +74,15 @@ class Fellow(Hero):
 
     def handle_collisions(self, coll_objects):
         from enemy import Enemy
+        from shooting_enemy import ShootingEnemy
+
         for object in coll_objects:
-            if isinstance(object, Enemy):
+            if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
                 self.is_alive = False
+            if isinstance(object, Bullet) and Fellow not in object.not_touching:
+                self.xp -= 2
+                if self.xp <= 0:
+                    self.is_alive = False
 
     def is_enemy_near(self):
         for enemy in self.game.enemies:
