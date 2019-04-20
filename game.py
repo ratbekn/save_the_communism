@@ -45,14 +45,6 @@ class Game:
         self.sum_dx = 0
 
     def init(self):
-        self.player = Player(150, 150, self)
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
-        self.objects.append(self.player)
-        for i in range(MAX_ENEMIES_COUNT):
-            self.enemies.append(self.create_enemy())
-        self.objects.append(Citizen(150, 250, self))
-        self.objects.extend(self.enemies)
-        self.player.on_pos_changed = self.change_camera_pos
         self.buildings = []
         with open('Map/map.txt', 'r') as f:
             x = 0
@@ -61,10 +53,19 @@ class Game:
                 for s in line:
                     if s == '#':
                         self.buildings.append(MainBuilding(x, y, self))
-                    x += MainBuilding.size *2
+                    x += MainBuilding.size * 2
                 x = 0
                 y +=MainBuilding.size
         self.objects.extend(self.buildings)
+        self.player = Player(150, 150, self)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.objects.append(self.player)
+        for i in range(MAX_ENEMIES_COUNT):
+            self.enemies.append(self.create_hero(Enemy))
+        self.objects.append(Citizen(150, 250, self))
+        self.objects.extend(self.enemies)
+        self.player.on_pos_changed = self.change_camera_pos
+
 
     def collide_with_building(self, x, y, r):
         for building in self.buildings:
