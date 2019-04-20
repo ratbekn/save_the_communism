@@ -16,6 +16,8 @@ class Fellow(Hero):
         self.follow_player()
         if self.is_enemy_near():
             self.attack_enemies()
+        else:
+            self.rotation_vector = self.game.player.rotation_vector
 
     def attack_enemies(self):
         nearest = self._get_nearest_enemy()

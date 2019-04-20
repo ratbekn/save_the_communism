@@ -39,9 +39,7 @@ class Enemy(Hero):
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
-            if isinstance(object, ForceField) or isinstance(object, Fellow):
-                self.is_alive = False
-            elif isinstance(object, Bullet):
+            if isinstance(object, Bullet):
                 self.is_alive = False
 
     def check_collision_with_other_enemies(self, dx, dy):

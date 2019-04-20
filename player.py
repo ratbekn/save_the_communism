@@ -45,7 +45,8 @@ class Player(Hero):
             int(self.move_direction[1] * self.speed), self.x, self.y)
 
     def on_released(self, key):
-        self.pressed.remove(key)
+        if key in self.pressed:
+            self.pressed.remove(key)
 
     def on_pressed(self, key):
         self.pressed.add(key)
