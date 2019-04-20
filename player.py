@@ -25,7 +25,6 @@ class Player(GameObject):
             keydown_handlers_dict[key].append(self.on_pressed)
             keyup_handlers_dict[key].append(self.on_released)
         keydown_handlers_dict[pygame.K_SPACE].append(self.hit)
-        keyup_handlers_dict[pygame.K_SPACE].append(self.hit)
 
     def hit(self, key):
         self.game.objects.append(ForceField(self.x, self.y, self.game))

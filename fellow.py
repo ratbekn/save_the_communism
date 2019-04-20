@@ -1,5 +1,4 @@
 from game_object import GameObject
-from enemy import Enemy
 import pygame
 import math
 import geometry
@@ -29,12 +28,13 @@ class Fellow(GameObject):
         return nearest
 
     def _get_distance_to(self, object):
-        return math.sqrt((self.x - object.x) ** 2 + (self.y - object.y))
+        return math.sqrt((self.x - object.x) ** 2 + (self.y - object.y) ** 2)
 
     def draw(self):
         pygame.draw.circle(self.game.surface, pygame.Color("white"), (self.x, self.y), self.radius)
 
     def handle_collisions(self, coll_objects):
+        from enemy import Enemy
         for object in coll_objects:
             if isinstance(object, Enemy):
                 self.is_alive = False
