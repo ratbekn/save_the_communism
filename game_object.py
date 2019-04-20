@@ -6,8 +6,6 @@ class GameObject:
         self.x = x
         self.y = y
         self.radius = r
-        self.speed = 5
-        self.move_direction = (0, 0)
         self.is_alive = True
 
     @property
@@ -31,13 +29,6 @@ class GameObject:
 
     def handle_collisions(self, coll_objects):
         pass
-
-    def set_position(self, x, y):
-        self.x = max(self.radius, min(x, self.field_width - self.radius))
-        self.y = max(self.radius, min(y, self.field_height - self.radius))
-
-    def move(self, dx, dy):
-        self.set_position(self.x + dx, self.y + dy)
 
     def update(self):
         pass
