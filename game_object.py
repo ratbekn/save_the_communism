@@ -1,5 +1,3 @@
-
-
 class GameObject:
     def __init__(self, x, y, r, game):
         self.game = game

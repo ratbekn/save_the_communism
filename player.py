@@ -1,4 +1,5 @@
 import pygame
+
 from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
@@ -19,13 +20,13 @@ class Player(GameObject):
         self.pressed = set()
         self.image = pygame.image.load('images/lenin.png')
         self.image = pygame.transform.scale(self.image, (self.radius * 3, self.radius * 3))
+        self.on_pos_changed = None
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
         for key in self.dirs:
             keydown_handlers_dict[key].append(self.on_pressed)
             keyup_handlers_dict[key].append(self.on_released)
         keydown_handlers_dict[pygame.K_SPACE].append(self.hit)
-        keyup_handlers_dict[pygame.K_SPACE].append(self.hit)
 
     def hit(self, key):
         self.game.objects.append(ForceField(self.x, self.y, self.game))
@@ -43,8 +44,7 @@ class Player(GameObject):
 
         self.move_direction = geometry.normalize_direction((x, y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
-
-
+        self.on_pos_changed(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed), self.x, self.y)
 
     def on_released(self, key):
         self.pressed.remove(key)
