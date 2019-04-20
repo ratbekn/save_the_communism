@@ -1,7 +1,9 @@
 import pygame
+
+from MovableObject import MovableObject
 from game_object import GameObject
 
-class Bullet(GameObject):
+class Bullet(MovableObject):
     def __init__(self, x, y, dir_x, dir_y, game, owner):
         super().__init__(x, y, 10, game)
         self.speed = 10
