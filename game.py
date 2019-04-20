@@ -140,28 +140,13 @@ class Game:
                 alive_objs.append(obj)
         return alive_objs
 
-    def create_enemy(self):
-        x = random.randrange(self.surface.get_height())
-        while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            x = random.randrange(self.surface.get_height())
+    def create_hero(self, cls):
+        x, y = 0, 0
+        while x < self.screen_width and y < self.screen_height:
+            x = random.randrange(self.width)
+            y = random.randrange(self.height)
 
-        y = random.randrange(self.surface.get_width())
-        while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            y = random.randrange(self.surface.get_width())
-        for e in self.enemies:
-            if calculate_distance((x, y), (e.x, e.y)) < e.radius * 2:
-                return self.create_enemy()
-        return Enemy(x, y, self)
-
-    def create_citizen(self):
-        x = random.randrange(self.surface.get_height())
-        while math.fabs(x - self.player.x) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            x = random.randrange(self.surface.get_height())
-
-        y = random.randrange(self.surface.get_width())
-        while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
-            y = random.randrange(self.surface.get_width())
-        for e in self.enemies:
-            if calculate_distance((x, y), (e.x, e.y)) < e.radius * 2:
-                return self.create_enemy()
-        return Citizen(x, y, self)
+        for o in self.objects:
+            if calculate_distance((x, y), (o.x, o.y)) < o.radius * 2:
+                return self.create_hero(cls)
+        return cls(x, y, self)

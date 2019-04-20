@@ -5,7 +5,6 @@ import geometry
 from bullet import Bullet
 from heroes import Hero
 
-
 class Fellow(Hero):
     def __init__(self, x, y, game):
         super().__init__(x, y, 45, game, 'images/fellow.png')
@@ -16,6 +15,8 @@ class Fellow(Hero):
         self.follow_player()
         if self.is_enemy_near():
             self.attack_enemies()
+        else:
+            self.rotation_vector = self.game.player.rotation_vector
 
     def attack_enemies(self):
         nearest = self._get_nearest_enemy()
@@ -55,10 +56,11 @@ class Fellow(Hero):
                 self.move_direction = (0, -1)
 
     def shoot(self):
+        from player import Player
         self.game.objects.append(
             Bullet(
                 self.x, self.y,
-                self.rotation_vector[0], self.rotation_vector[1], self.game, self))
+                self.rotation_vector[0], self.rotation_vector[1], self.game, [Player, Fellow]))
 
     def _get_nearest_enemy(self):
         min_dist = self._get_distance_to(self.game.enemies[0])
