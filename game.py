@@ -26,7 +26,7 @@ class Game:
         self.surface = pygame.Surface((self.width, self.height))
         self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
         self.camera_pos = 0, 0
-        self.background_image = pygame.image.load(back_image_filename)
+        self.background_image = pygame.image.load(back_image_filename).convert()
         self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
         self.game_over = False
@@ -74,9 +74,9 @@ class Game:
     def change_camera_pos(self, dx, dy, x, y):
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2:
+        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2 - self.player.speed:
             ch_x = self.camera_pos[0]
-        if y < self.screen_height // 2 or y > self.height - self.screen_height // 2:
+        if y < self.screen_height // 2 or y > self.height - self.screen_height // 2 - self.player.speed:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
 
@@ -91,8 +91,6 @@ class Game:
         self.player.on_pos_changed = self.change_camera_pos
 
         while not self.game_over:
-            # camera_pos = self.player.move(camera_pos)
-            # self.display.fill((0,0,0))
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
                 for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
                     self.surface.blit(self.background_image, (x, y))
