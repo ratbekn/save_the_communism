@@ -1,8 +1,9 @@
 from game_object import GameObject
 from enemy import Enemy
 import pygame
-import math
+from geometry import *
 import geometry
+
 
 class Fellow(GameObject):
     def __init__(self, x, y, game):

@@ -1,7 +1,7 @@
 from force_field import ForceField
 from game_object import GameObject
 import pygame
-from helpers import *
+from geometry import *
 
 
 class Enemy(GameObject):
@@ -14,6 +14,7 @@ class Enemy(GameObject):
         self.choose_direction()
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed
+        dx, dy = self.check_collision_with_other_enemies(dx, dy)
         self.move(dx, dy)
 
     def draw(self):
@@ -32,14 +33,13 @@ class Enemy(GameObject):
                 self.move_direction = (0, -1)
 
     def handle_collisions(self, coll_objects):
-        for object in coll_objects:
-            if isinstance(object, ForceField):
+        for o in coll_objects:
+            if isinstance(o, ForceField):
                 self.is_alive = False
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:
-            if enemy != self and (calculate_distance(self.x + dx, enemy.x) < enemy.radius
-                                  or calculate_distance(self.y + dy, enemy.y) < enemy.radius):
-                return 0, 0
-            else:
-                return dx, dy
+            if enemy != self:
+                if calculate_distance((self.x + dx, self.y + dy), (enemy.x, enemy.y)) < enemy.radius * 2:
+                    return 0, 0
+        return dx, dy
