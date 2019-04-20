@@ -12,6 +12,7 @@ class Enemy(Hero):
         super().__init__(x, y, 45, game, 'images/enemy.png')
         self.x = x
         self.y = y
+        self.xp = 10
 
     def update(self):
         if not self.game.player.is_alive:
