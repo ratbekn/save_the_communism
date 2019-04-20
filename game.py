@@ -133,9 +133,9 @@ class Game:
     def change_camera_pos(self, dx, dy, x, y):
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2 - self.player.speed:
+        if x <= self.screen_width // 2 + self.player.speed or x >= self.width - self.screen_width // 2 - self.player.speed:
             ch_x = self.camera_pos[0]
-        if y < self.screen_height // 2 or y > self.height - self.screen_height // 2 - self.player.speed:
+        if y <= self.screen_height // 2 + self.player.speed or y >= self.height - self.screen_height // 2 - self.player.speed:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
 
