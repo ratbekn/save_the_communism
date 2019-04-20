@@ -12,7 +12,7 @@ class Boss(Hero):
         super().__init__(x, y, 70, game, 'images/boss.png')
         self.x = x
         self.y = y
-        self.xp = 100
+        self.xp = 170
         self.game.boss_sound.play()
         self.speed = 13
 
