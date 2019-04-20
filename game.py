@@ -59,7 +59,7 @@ class Game:
                 y +=MainBuilding.size
         self.objects.extend(self.buildings)
         self.player = Player(150, 150, self)
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
             self.enemies.append(self.create_hero(Enemy))
