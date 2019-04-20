@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import math
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -10,8 +9,8 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 3
-MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
+MAX_ENEMIES_COUNT = 10
+MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 300
 BACKGROUND_IMAGE_SIZE = 128
 
 class Game:
