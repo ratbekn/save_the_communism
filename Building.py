@@ -4,6 +4,7 @@ from game_object import GameObject
 
 
 class Building(GameObject):
+    size = 230
     def __init__(self, x, y, game, radius, image_path):
         super().__init__(x, y, radius, game)
         self.image = pygame.image.load(image_path).convert_alpha()

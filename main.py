@@ -4,7 +4,7 @@ from game import Game
 
 
 FIELD_WIDTH = 6000
-FIELD_HEIGHT = 1024
+FIELD_HEIGHT = 1700
 
 def main():
     handler = EventHandler()
