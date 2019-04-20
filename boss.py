@@ -9,10 +9,10 @@ import pygame
 
 class Boss(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 45, game, 'images/boss.png')
+        super().__init__(x, y, 70, game, 'images/boss.png')
         self.x = x
         self.y = y
-        self.xp = 200
+        self.xp = 100
         self.game.boss_sound.play()
         self.speed = 13
 

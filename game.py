@@ -126,9 +126,9 @@ class Game:
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
-                self.objects.append(self.boss)
-                self.enemies.append(self.boss)
+            # elif event.type == pygame.KEYDOWN and event.key == pygame.K_b:
+            #     self.objects.append(self.boss)
+            #     self.enemies.append(self.boss)
 
             elif event.type == pygame.QUIT:
                 pygame.quit()
@@ -169,7 +169,7 @@ class Game:
             self.started = False
             while not self.started:
                 self.game_over_menu.run(self.display)
-
+            self.is_boss = False
             self.init()
             while not self.game_over:
                 for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
@@ -181,6 +181,11 @@ class Game:
 
                 self.display.blit(self.surface, self.camera_pos)
                 self.ui.draw()
+
+                if (self.player.score >= 10) and self.is_boss == False:
+                    self.is_boss = True
+                    self.objects.append(self.boss)
+                    self.enemies.append(self.boss)
 
                 CollisionsResolver.resolve_collisions(self.objects)
 
@@ -197,6 +202,9 @@ class Game:
                     self.enemies.append(enemy)
                 if not self.player.is_alive:
                     self.game_over = True
+                if not self.boss.is_alive:
+                    self.game_over = True
+                    self.show_win()
                 pygame.display.update()
                 self.clock.tick(self.frame_rate)
 
@@ -208,6 +216,12 @@ class Game:
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)
+
+    def show_win(self):
+        image = pygame.image.load('images/win.png').convert()
+        self.display.blit(image, (0, 0))
+        pygame.display.update()
+        pygame.time.delay(10000)
 
     def apply_generators(self):
         for generator in self.obj_generators:
