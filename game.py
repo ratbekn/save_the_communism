@@ -23,7 +23,6 @@ MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
-
 class Game:
     def __init__(self,
                  caption,
@@ -49,7 +48,6 @@ class Game:
         self.is_quit = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.display.set_caption(caption)
-        self.player = Player(150, 150, self)
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
@@ -85,8 +83,6 @@ class Game:
                     x += Building.size * 2
                 x = 0
                 y += Building.size
-        self.player.game = None
-        self.player = None
         self.player = Player(150, 150, self)
         self.objects.append(self.player)
         self.objects.extend(self.buildings)

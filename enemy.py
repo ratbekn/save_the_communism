@@ -13,7 +13,8 @@ class Enemy(Hero):
         super().__init__(x, y, 45, game, 'images/enemy.png')
         self.x = x
         self.y = y
-        self.xp = 10
+        self.xp = 3
+        self.speed = 11
 
     def update(self):
         if not self.game.player.is_alive:
@@ -34,7 +35,7 @@ class Enemy(Hero):
             if isinstance(object, Serp):
                 self.is_alive = False
             if isinstance(object, Bullet):
-                self.xp -= 5
+                self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
 

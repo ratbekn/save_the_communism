@@ -4,10 +4,10 @@ from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
+from SerpBonus import SerpBonus
 from serp import Serp
 from bullet import Bullet
 from shooting_enemy import ShootingEnemy
-from SerpBonus import SerpBonus
 
 class Player(Hero):
     def __init__(self, x, y, game):
@@ -73,9 +73,17 @@ class Player(Hero):
         for object in coll_objects:
             if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
                 self.is_alive = False
+                pygame.mixer_music.stop()
+                rip = pygame.mixer.Sound('rip.wav')
+                rip.set_volume(1)
+                rip.play()
             if isinstance(object, Bullet) and Player not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
+                    pygame.mixer_music.stop()
+                    rip = pygame.mixer.Sound('rip.wav')
+                    rip.set_volume(1)
+                    rip.play()
             if isinstance(object, SerpBonus):
                 self.bullets_cnt += 5

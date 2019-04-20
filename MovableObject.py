@@ -4,7 +4,7 @@ from game_object import GameObject
 class MovableObject(GameObject):
     def __init__(self, x, y, r, game):
         super().__init__(x, y, r, game)
-        self.speed = 13
+        self.speed = 1
         self.move_direction = (0, 0)
         self.collision = False
 
