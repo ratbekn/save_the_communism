@@ -5,6 +5,7 @@ from heroes import Hero
 import pygame
 from geometry import *
 from bullet import Bullet
+from serp import Serp
 
 
 class Enemy(Hero):
@@ -30,8 +31,10 @@ class Enemy(Hero):
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
+            if isinstance(object, Serp):
+                self.is_alive = False
             if isinstance(object, Bullet):
-                self.xp -= 3
+                self.xp -= 5
                 if self.xp <= 0:
                     self.is_alive = False
 

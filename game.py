@@ -139,6 +139,10 @@ class Game:
                 alive_objs.append(obj)
         return alive_objs
 
+    def is_inside_screen(self, object):
+        return (0 <= object.x + self.camera_pos[0] and object.x + self.camera_pos[0] <= self.screen_width and
+            0 <= object.y + self.camera_pos[1] and object.y + self.camera_pos[1] <= self.screen_height)
+
     def create_hero(self, cls):
         x, y = 0, 0
         while x < self.screen_width and y < self.screen_height:

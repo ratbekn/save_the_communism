@@ -78,6 +78,6 @@ class Fellow(Hero):
 
     def is_enemy_near(self):
         for enemy in self.game.enemies:
-            if calculate_distance((self.x, self.y), (enemy.x, enemy.y)) <= 300:
+            if self.game.is_inside_screen(enemy):
                 return True
         return False
