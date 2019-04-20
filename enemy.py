@@ -12,13 +12,12 @@ class Enemy(Hero):
         super().__init__(x, y, 45, game, 'images/enemy.png')
         self.x = x
         self.y = y
+        self.xp = 10
 
     def update(self):
         if not self.game.player.is_alive:
             return
         self.orientate_to(self.game.player.x, self.game.player.y)
-        #self.rotation_vector = get_vector(
-        #    (self.x, self.y), (self.game.player.x, self.game.player.y))
         self.choose_direction()
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed
@@ -26,25 +25,15 @@ class Enemy(Hero):
         self.move(int(dx), int(dy))
 
     def choose_direction(self):
-        '''
-        if math.fabs(self.x - self.game.player.x) > math.fabs(self.y - self.game.player.y):
-            if self.x < self.game.player.x:
-                self.move_direction = (1, 0)
-            else:
-                self.move_direction = (-1, 0)
-        else:
-            if self.y < self.game.player.y:
-                self.move_direction = (0, 1)
-            else:
-                self.move_direction = (0, -1)
-        '''
         self.move_direction = normalize_direction(
             get_vector((self.x, self.y), (self.game.player.x, self.game.player.y)))
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
             if isinstance(object, Bullet):
-                self.is_alive = False
+                self.xp -= 3
+                if self.xp <= 0:
+                    self.is_alive = False
 
     def check_collision_with_other_enemies(self, dx, dy):
         for enemy in self.game.enemies:

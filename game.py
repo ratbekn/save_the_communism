@@ -13,7 +13,8 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 3
+MAX_ENEMIES_COUNT = 7
+MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
 
@@ -47,12 +48,15 @@ class Game:
 
     def init(self):
         self.player = Player(150, 150, self)
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
-            self.enemies.append(self.create_enemy())
+            self.enemies.append(self.create_hero(Enemy))
+        for i in range(MAX_CITIZENS_COUNT):
+            self.fellows.append(self.create_hero(Citizen))
         self.objects.append(Citizen(150, 250, self))
         self.objects.extend(self.enemies)
+        self.objects.extend(self.fellows)
         self.player.on_pos_changed = self.change_camera_pos
         self.buildings = []
         with open('Map/map.txt', 'r') as f:
@@ -78,7 +82,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in self.objects:
+        for o in reversed(self.objects):
             o.draw()
 
     def handle_events(self):
@@ -96,9 +100,7 @@ class Game:
             elif event.type == pygame.KEYUP:
                 for handler in self.keyup_handlers[event.key]:
                     handler(event.key)
-            elif event.type in (pygame.MOUSEBUTTONDOWN,
-                                pygame.MOUSEBUTTONUP,
-                                pygame.MOUSEMOTION):
+            elif event.type in (pygame.MOUSEBUTTONDOWN,):
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
