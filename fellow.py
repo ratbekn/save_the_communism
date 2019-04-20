@@ -13,22 +13,46 @@ class Fellow(Hero):
         self.shoot_after = self.shot_delay
 
     def update(self):
-        if len(self.game.enemies) == 0:
-            return
+        self.follow_player()
+        if self.is_enemy_near():
+            self.attack_enemies()
 
+    def attack_enemies(self):
         nearest = self._get_nearest_enemy()
         self.orientate_to(nearest.x, nearest.y)
-        #self.rotation_vector = get_vector(
+        # self.rotation_vector = get_vector(
         #    (self.x, self.y), (nearest.x, nearest.y))
-        self.move_direction = geometry.get_vector(
-            (self.x, self.y), (nearest.x, nearest.y))
-        self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
-
         if self.shoot_after <= 0:
             self.shoot()
             self.shoot_after = self.shot_delay
         else:
             self.shoot_after -= 1
+
+    def follow_player(self):
+        self.choose_direction()
+        dx = self.move_direction[0] * self.speed
+        dy = self.move_direction[1] * self.speed
+        dx, dy = self.check_collision_with_other_fellows(dx, dy)
+        self.move(dx, dy)
+
+    def check_collision_with_other_fellows(self, dx, dy):
+        for fellow in self.game.fellows:
+            if fellow != self:
+                if calculate_distance((self.x + dx, self.y + dy), (fellow.x, fellow.y)) < fellow.radius * 2:
+                    return 0, 0
+        return dx, dy
+
+    def choose_direction(self):
+        if math.fabs(self.x - self.game.player.x) > math.fabs(self.y - self.game.player.y):
+            if self.x < self.game.player.x:
+                self.move_direction = (1, 0)
+            else:
+                self.move_direction = (-1, 0)
+        else:
+            if self.y < self.game.player.y:
+                self.move_direction = (0, 1)
+            else:
+                self.move_direction = (0, -1)
 
     def shoot(self):
         self.game.objects.append(
@@ -56,3 +80,9 @@ class Fellow(Hero):
         for object in coll_objects:
             if isinstance(object, Enemy):
                 self.is_alive = False
+
+    def is_enemy_near(self):
+        for enemy in self.game.enemies:
+            if calculate_distance((self.x, self.y), (enemy.x, enemy.y)) <= 300:
+                return True
+        return False

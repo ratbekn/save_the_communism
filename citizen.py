@@ -16,4 +16,6 @@ class Citizen(Hero):
         for object in coll_objects:
             if isinstance(object, ForceField):
                 self.is_alive = False
-                self.game.objects.append(Fellow(self.x, self.y, self.game))
+                fellow = Fellow(self.x, self.y, self.game)
+                self.game.objects.append(fellow)
+                self.game.fellows.append(fellow)

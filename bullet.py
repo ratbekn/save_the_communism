@@ -3,7 +3,7 @@ from game_object import GameObject
 
 class Bullet(GameObject):
     def __init__(self, x, y, dir_x, dir_y, game, owner):
-        super().__init__(x, y, 5, game)
+        super().__init__(x, y, 10, game)
         self.speed = 10
         self.move_direction = (dir_x, dir_y)
         self.owner = owner
