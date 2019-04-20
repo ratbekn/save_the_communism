@@ -4,6 +4,7 @@ import random
 import math
 
 from Building import Building
+from main_building import MainBuilding
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -42,18 +43,28 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+        self.sum_dx = 0
 
     def init(self):
-        self.player = Player(100, 100, self)
+        self.player = Player(150, 150, self)
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
             self.enemies.append(self.create_enemy())
-        self.objects.append(Citizen(100, 200, self))
+        self.objects.append(Citizen(150, 250, self))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
         self.buildings = []
-        self.buildings.append(Building(300, 300, 50, self))
+        with open('Map/map.txt', 'r') as f:
+            x = 0
+            y = 0
+            for line in f.readlines():
+                for s in line:
+                    if s == '#':
+                        self.buildings.append(MainBuilding(x, y, self))
+                    x += MainBuilding.size *2
+                x = 0
+                y +=MainBuilding.size
         self.objects.extend(self.buildings)
 
     def collide_with_building(self, x, y, r):
@@ -92,10 +103,14 @@ class Game:
                     handler(event.type, event.pos)
 
     def change_camera_pos(self, dx, dy, x, y):
+        if (dx < 0):
+            dx = 0
+        self.sum_dx += dx
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2 - self.player.speed:
+        if x < self.screen_width // 2 + self.sum_dx or x > self.width - self.screen_width // 2 - self.player.speed:
             ch_x = self.camera_pos[0]
+            self.sum_dx -= dx
         if y < self.screen_height // 2 or y > self.height - self.screen_height // 2 - self.player.speed:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
