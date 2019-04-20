@@ -44,6 +44,7 @@ class Player(Hero):
                             self.rotation_vector[0], self.rotation_vector[1],
                             self.game, [Player, Fellow])
             self.game.objects.append(bullet)
+            self.game.attack.play()
 
     def update(self):
         x, y = 0, 0
@@ -52,6 +53,7 @@ class Player(Hero):
         #self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
+            self.game.step.play()
             x += self.dirs[key][0]
             y += self.dirs[key][1]
 
@@ -74,16 +76,12 @@ class Player(Hero):
             if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
                 self.is_alive = False
                 pygame.mixer_music.stop()
-                rip = pygame.mixer.Sound('rip.wav')
-                rip.set_volume(1)
-                rip.play()
+                self.game.rip.play()
             if isinstance(object, Bullet) and Player not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
                     self.is_alive = False
                     pygame.mixer_music.stop()
-                    rip = pygame.mixer.Sound('rip.wav')
-                    rip.set_volume(1)
-                    rip.play()
+                    self.game.rip.play()
             if isinstance(object, SerpBonus):
                 self.bullets_cnt += 1

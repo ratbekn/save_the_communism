@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import math
 from Building import Building
 from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
@@ -43,9 +42,7 @@ class Game:
         self.is_quit = False
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.display.set_caption(caption)
-        pygame.mixer_music.load("Моя оборона 2.mp3")
-        pygame.mixer_music.set_volume(0.2)
-        pygame.mixer_music.play()
+        self.import_sounds()
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
@@ -122,7 +119,6 @@ class Game:
                     self.is_boss_scene = True
                     self.objects.append(self.boss)
                     self.enemies.append(self.boss)
-
             elif event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
@@ -147,6 +143,8 @@ class Game:
 
     def start(self):
         self.started = True
+        self.rip.stop()
+        pygame.mixer_music.play()
 
     def quit(self):
         pygame.quit()
@@ -229,3 +227,13 @@ class Game:
             if calculate_distance((x, y), (o.x, o.y)) < o.radius * 2:
                 return self.create_hero(cls)
         return cls(x, y, self)
+
+    def import_sounds(self):
+        pygame.mixer_music.load(r"sounds\Моя оборона 2.mp3")
+        pygame.mixer_music.set_volume(0.2)
+        pygame.mixer_music.play()
+        self.rip = pygame.mixer.Sound(r'sounds\rip.wav')
+        self.rip.set_volume(1)
+        self.step = pygame.mixer.Sound(r'sounds\stone1.ogg')
+        self.attack = pygame.mixer.Sound(r'sounds\attack.ogg')
+        self.attack.set_volume(1)
