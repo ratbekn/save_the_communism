@@ -6,6 +6,7 @@ FIELD_HEIGHT = 1024
 
 def main():
     game = Game('Save The Communism', "images/main_background.png", 30, FIELD_WIDTH, FIELD_HEIGHT)
+    game.init()
     game.run()
 
 

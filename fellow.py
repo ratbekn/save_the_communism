@@ -1,9 +1,10 @@
+from MovableObject import MovableObject
 from game_object import GameObject
 import pygame
 import math
 import geometry
 
-class Fellow(GameObject):
+class Fellow(MovableObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 20, game)
 

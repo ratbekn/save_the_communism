@@ -1,6 +1,13 @@
 import math
 from collections import defaultdict
 
+class NewPos:
+    def __init__(self, x, y, r):
+        self.radius = r
+        self.y = y
+        self.x = x
+
+new_pos = NewPos(0,0,0)
 
 class CollisionsResolver:
     @staticmethod
@@ -8,6 +15,13 @@ class CollisionsResolver:
         collisions = CollisionsResolver._get_collisions_dict(game_objects)
         for object in collisions.keys():
             object.handle_collisions(collisions[object])
+
+    @staticmethod
+    def are_collided(first, second_x, second_y, second_radius):
+        new_pos.x = second_x
+        new_pos.y = second_y
+        new_pos.radius = second_radius
+        return CollisionsResolver._are_collided(first, new_pos)
 
     @staticmethod
     def _are_collided(first, second):

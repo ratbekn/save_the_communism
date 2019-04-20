@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 import math
+
+from Building import Building
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -31,7 +33,6 @@ class Game:
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        self.player = Player(100, 100, self)
         self.enemies = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
@@ -41,6 +42,25 @@ class Game:
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
+
+    def init(self):
+        self.player = Player(100, 100, self)
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
+        self.objects.append(self.player)
+        for i in range(MAX_ENEMIES_COUNT):
+            self.enemies.append(self.create_enemy())
+        self.objects.append(Citizen(100, 200, self))
+        self.objects.extend(self.enemies)
+        self.player.on_pos_changed = self.change_camera_pos
+        self.buildings = []
+        self.buildings.append(Building(300, 300, 30, self))
+        self.objects.extend(self.buildings)
+
+    def collide_with_building(self, x, y, r):
+        for building in self.buildings:
+            if CollisionsResolver.are_collided(building, x, y, r):
+                return True
+        return False
 
     def update(self):
         for o in self.objects:
@@ -81,15 +101,6 @@ class Game:
         self.camera_pos = ch_x, ch_y
 
     def run(self):
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
-        self.objects.append(self.player)
-        for i in range(MAX_ENEMIES_COUNT):
-            self.enemies.append(self.create_enemy())
-        self.objects.append(Citizen(100, 200, self))
-        self.objects.extend(self.enemies)
-
-        self.player.on_pos_changed = self.change_camera_pos
-
         while not self.game_over:
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
                 for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):

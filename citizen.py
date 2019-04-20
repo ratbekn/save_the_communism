@@ -1,11 +1,13 @@
 import pygame
+
+from MovableObject import MovableObject
 from game_object import GameObject
 from force_field import ForceField
 from fellow import Fellow
 
 
 
-class Citizen(GameObject):
+class Citizen(MovableObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 20, game)
         self.image = pygame.image.load('images/citizen.png')

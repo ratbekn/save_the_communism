@@ -1,3 +1,4 @@
+from MovableObject import MovableObject
 from force_field import ForceField
 from game_object import GameObject
 from fellow import Fellow
@@ -5,7 +6,7 @@ import pygame
 import math
 
 
-class Enemy(GameObject):
+class Enemy(MovableObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 25, game)
         self.x = x

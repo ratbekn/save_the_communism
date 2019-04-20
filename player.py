@@ -1,12 +1,13 @@
 import pygame
 
+from MovableObject import MovableObject
 from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
 
 
-class Player(GameObject):
+class Player(MovableObject):
     def __init__(self, x, y, game):
         super().__init__(x, y, 25, game)
         self.x, self.y = x, y
