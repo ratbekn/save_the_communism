@@ -244,3 +244,5 @@ class Game:
         self.attack_sound = pygame.mixer.Sound(r'sounds\attack.ogg')
         self.attack_sound.set_volume(1)
         self.boss_sound = pygame.mixer.Sound(r'sounds\boss.ogg')
+        self.enemy_death1 = pygame.mixer.Sound(r'sounds\enemy_death1.ogg')
+        self.enemy_death2 = pygame.mixer.Sound(r'sounds\enemy_death2.ogg')
