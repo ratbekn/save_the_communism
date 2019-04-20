@@ -14,6 +14,7 @@ class ShootingEnemy(Hero):
         self.xp = 10
         self.shot_delay = 40
         self.shoot_after = self.shot_delay
+        self.speed = 9
 
     def update(self):
         if not self.game.player.is_alive:
@@ -32,6 +33,9 @@ class ShootingEnemy(Hero):
             self.shoot_after -= 1
 
     def shoot(self):
+        from player import Player
+
+
         bullet = Bullet(
                 self.x, self.y,
                 self.rotation_vector[0], self.rotation_vector[1], self.game, [Enemy, ShootingEnemy], 'images/bottile.png')
@@ -60,5 +64,6 @@ class ShootingEnemy(Hero):
     def die(self):
         self.is_alive = False
         self.game.enemy_death2.play()
+        self.game.player.score += 2
         died = DiedMan(self.x, self.y, self.radius, self.game, r'images\гопник сдох.png')
         self.game.objects.append(died)

@@ -15,7 +15,7 @@ class Enemy(Hero):
         self.x = x
         self.y = y
         self.xp = 3
-        self.speed = 11
+        self.speed = 9
 
     def update(self):
         if not self.game.player.is_alive:
@@ -50,5 +50,6 @@ class Enemy(Hero):
     def die(self):
         self.is_alive = False
         self.game.enemy_death1.play()
+        self.game.player.score += 1
         died = DiedMan(self.x, self.y, self.radius, self.game, r'images\капиталист.png')
         self.game.objects.append(died)

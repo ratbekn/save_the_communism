@@ -1,4 +1,5 @@
 import pygame
+import datetime
 from heroes import Hero
 from game_object import GameObject
 from force_field import ForceField
@@ -8,6 +9,8 @@ from SerpBonus import SerpBonus
 from serp import Serp
 from bullet import Bullet
 from shooting_enemy import ShootingEnemy
+from boss import Boss
+
 
 class Player(Hero):
     def __init__(self, x, y, game):
@@ -22,9 +25,11 @@ class Player(Hero):
         }
         self.pressed = set()
         self.on_pos_changed = None
-        self.bullets_cnt = 30
+        self.bullets_cnt = 10
         self.radius = 35
         self.xp = 10
+        self.score = 0
+        self.last_damaged = datetime.datetime.now()
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict, mouse_handlers):
         for key in self.dirs:
@@ -41,8 +46,8 @@ class Player(Hero):
         if self.bullets_cnt > 0:
             self.bullets_cnt -= 1
             bullet = Serp(self.x, self.y,
-                            self.rotation_vector[0], self.rotation_vector[1],
-                            self.game, [Player, Fellow])
+                          self.rotation_vector[0], self.rotation_vector[1],
+                          self.game, [Player, Fellow])
             self.game.objects.append(bullet)
             self.game.attack_sound.play()
 
@@ -50,7 +55,7 @@ class Player(Hero):
         x, y = 0, 0
         pos = pygame.mouse.get_pos()
         self.orientate_to(pos[0] - self.game.camera_pos[0], pos[1] - self.game.camera_pos[1])
-        #self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
+        # self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
             x += self.dirs[key][0]
@@ -72,8 +77,12 @@ class Player(Hero):
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
-            if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
+            if isinstance(object, Boss):
                 self.die()
+            if isinstance(object, Enemy) or isinstance(object, ShootingEnemy):
+                if ((datetime.datetime.now() - self.last_damaged).seconds > 1):
+                    self.xp -= 3
+                    self.last_damaged = datetime.datetime.now()
             if isinstance(object, Bullet) and Player not in object.not_touching:
                 self.xp -= 2
                 if self.xp <= 0:
@@ -85,3 +94,6 @@ class Player(Hero):
         self.is_alive = False
         pygame.mixer_music.stop()
         self.game.rip_sound.play()
+
+        if self.xp <= 0:
+            self.is_alive = False
