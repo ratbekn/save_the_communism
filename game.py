@@ -25,7 +25,7 @@ class Game:
         self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
         self.camera_pos = 0, 0
         self.background_image = pygame.image.load(back_image_filename)
-        self.background_image = pygame.transform.scale(self.background_image, (self.width, self.height))
+        self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
@@ -89,9 +89,9 @@ class Game:
         while not self.game_over:
             # camera_pos = self.player.move(camera_pos)
             # self.display.fill((0,0,0))
-            # for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
-            # for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
-            self.surface.blit(self.background_image, (0, 0))
+            for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
+                for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
+                    self.surface.blit(self.background_image, (x, y))
             self.handle_events()
             self.update()
             self.draw()
