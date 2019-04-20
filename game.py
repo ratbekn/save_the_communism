@@ -5,14 +5,13 @@ import math
 from player import Player
 from enemy import Enemy
 
-
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
-import pygame.camera
 
 from collections import defaultdict
 
 BACKGROUND_IMAGE_SIZE = 128
+
 
 class Game:
     def __init__(self,
@@ -73,9 +72,9 @@ class Game:
     def change_camera_pos(self, dx, dy, x, y):
         ch_x = self.camera_pos[0] - dx
         ch_y = self.camera_pos[1] - dy
-        if (x < self.screen_width // 2 or x > self.width - self.screen_width // 2):
+        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2:
             ch_x = self.camera_pos[0]
-        if (y < self.screen_height // 2 or y > self.height - self.screen_height // 2):
+        if y < self.screen_height // 2 or y > self.height - self.screen_height // 2:
             ch_y = self.camera_pos[1]
         self.camera_pos = ch_x, ch_y
 
@@ -91,7 +90,7 @@ class Game:
             # camera_pos = self.player.move(camera_pos)
             # self.display.fill((0,0,0))
             # for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
-                # for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
+            # for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
             self.surface.blit(self.background_image, (0, 0))
             self.handle_events()
             self.update()
