@@ -8,7 +8,7 @@ from heroes import Hero
 
 class Fellow(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 45, game, 'images/citizen.png')
+        super().__init__(x, y, 45, game, 'images/fellow.png')
         self.shot_delay = 10
         self.shoot_after = self.shot_delay
 
