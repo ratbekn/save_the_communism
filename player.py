@@ -4,6 +4,7 @@ from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
+from SerpBonus import SerpBonus
 from serp import Serp
 from bullet import Bullet
 from shooting_enemy import ShootingEnemy
