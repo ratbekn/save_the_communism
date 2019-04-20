@@ -25,10 +25,8 @@ class Game:
                  frame_rate, width, height):
         self.width = width
         self.height = height
-        self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.surface = pygame.Surface((self.width, self.height))
-        self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
         self.camera_pos = 0, 0
+        self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.background_image = pygame.image.load(back_image_filename).convert()
         self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
@@ -40,13 +38,16 @@ class Game:
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption(caption)
-        self.clock = pygame.time.Clock()
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
         self.sum_dx = 0
 
     def init(self):
+        self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.surface = pygame.Surface((self.width, self.height))
+        self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
+        self.clock = pygame.time.Clock()
         self.buildings = []
         with open('Map/map.txt', 'r') as f:
             x = 0
