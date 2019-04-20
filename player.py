@@ -31,6 +31,7 @@ class Player(Hero):
 
     def update(self):
         x, y = 0, 0
+        self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
             x += self.dirs[key][0]

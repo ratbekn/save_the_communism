@@ -18,4 +18,5 @@ def calculate_distance(first_obj, second_obj):
 
 
 def get_rotation_from_vector(x, y):
-    math.atan2()
+    return math.degrees(math.atan2(-y, x) - math.pi / 2)
+

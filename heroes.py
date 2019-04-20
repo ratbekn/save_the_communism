@@ -1,5 +1,6 @@
 import pygame
 from game_object import GameObject
+import geometry
 
 class Hero(GameObject):
     def __init__(self, x, y, radius, game, image_path):
@@ -9,5 +10,6 @@ class Hero(GameObject):
         self.rotation_vector = (0, 0)
 
     def draw(self):
-        pygame.transform.rotate()
-        self.game.surface.blit(self.image, (self.x - self.radius, self.y - self.radius))
+        img = pygame.transform.rotate(
+            self.image, geometry.get_rotation_from_vector(self.rotation_vector[0], self.rotation_vector[1]))
+        self.game.surface.blit(img, (self.x - self.radius, self.y - self.radius))
