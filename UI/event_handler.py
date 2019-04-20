@@ -16,7 +16,8 @@ class EventHandler:
             self.key_pressed = event.key
             self.__keys_pressed_queue.add(event.key)
         elif event.type == pygame.KEYUP:
-            self.__keys_pressed_queue.remove(event.key)
+            if event.key in self.__keys_pressed_queue:
+                self.__keys_pressed_queue.remove(event.key)
             if not len(self.__keys_pressed_queue) == 0:
                 self.key_pressed = min(self.__keys_pressed_queue)
         if len(self.__keys_pressed_queue) == 0:

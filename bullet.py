@@ -1,6 +1,5 @@
 import pygame
 from MovableObject import MovableObject
-from game_object import GameObject
 
 
 class Bullet(MovableObject):

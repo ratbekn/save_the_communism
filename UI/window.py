@@ -21,24 +21,22 @@ class Window:
         for obj in self.objects():
             obj.update()
 
-    def draw(self):
+    def draw(self, surface):
         for obj in self.objects():
-            obj.draw(self.surface)
+            obj.draw(surface)
 
-    def run(self):
-        self._setup_window()
-        while not self.is_ended:
-            self.surface.blit(self.background, (0, 0))
+    def run(self, surface):
+        surface.blit(self.background, (0, 0))
 
-            self._event_handler.handle_events()
-            if self._event_handler.last_event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            self.update()
-            self.draw()
+        self._event_handler.handle_events()
+        if self._event_handler.last_event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        self.update()
+        self.draw(surface)
 
-            pygame.display.update()
-            self.clock.tick(self.frame_rate)
+        pygame.display.update()
+        self.clock.tick(self.frame_rate)
 
     def __set_background(self, surface):
         background = pygame.image.load('images/mainmenu.png')
