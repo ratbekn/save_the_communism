@@ -37,6 +37,8 @@ class Fellow(Hero):
         self.move(dx, dy)
 
     def check_collision_with_other_fellows(self, dx, dy):
+        if calculate_distance((self.x + dx, self.y + dy), (self.game.player.x, self.game.player.y)) < self.radius * 2:
+            return 0, 0
         for fellow in self.game.fellows:
             if fellow != self:
                 if calculate_distance((self.x + dx, self.y + dy), (fellow.x, fellow.y)) < fellow.radius * 2:
@@ -67,7 +69,6 @@ class Fellow(Hero):
 
     def _get_distance_to(self, object):
         return math.sqrt((self.x - object.x) ** 2 + (self.y - object.y) ** 2)
-
 
     def handle_collisions(self, coll_objects):
         from enemy import Enemy

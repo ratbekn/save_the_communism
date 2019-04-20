@@ -1,7 +1,7 @@
 import pygame
-
 from MovableObject import MovableObject
 from game_object import GameObject
+
 
 class Bullet(MovableObject):
     def __init__(self, x, y, dir_x, dir_y, game, not_touching):

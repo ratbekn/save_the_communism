@@ -2,7 +2,6 @@ import pygame
 import sys
 import random
 import math
-
 from Building import Building
 from main_building import MainBuilding
 from player import Player
