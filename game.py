@@ -1,7 +1,6 @@
 import pygame
 import sys
 import random
-import math
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -13,6 +12,7 @@ from geometry import *
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
+
 
 class Game:
     def __init__(self,
@@ -30,7 +30,8 @@ class Game:
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        self.player = Player(100, 100, self)
+        self.fellows = []
+        self.player = Player(500, 500, self)
         self.enemies = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
