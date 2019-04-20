@@ -3,7 +3,7 @@ from UI.main_menu import MainMenu
 from game import Game
 
 
-FIELD_WIDTH = 6000
+FIELD_WIDTH = 10000
 FIELD_HEIGHT = 1700
 
 def main():

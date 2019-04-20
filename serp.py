@@ -6,7 +6,7 @@ class Serp(Bullet):
         super().__init__(x, y, dir_x, dir_y, game, not_touching)
         self.image = pygame.image.load('images/serp.png')
         self.radius = 20
-        self.speed = 20
+        self.speed = 30
         self.image = pygame.transform.scale(self.image, (self.radius * 2, self.radius * 2))
         self.im_width = self.image.get_width() / 2
         self.im_height = self.image.get_height() / 2

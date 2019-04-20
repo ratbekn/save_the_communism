@@ -3,6 +3,7 @@ import sys
 import random
 import math
 from Building import Building
+from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
 from high_building import HighBuilding
 from main_building import MainBuilding
@@ -61,6 +62,8 @@ class Game:
                         self.buildings.append(HighBuilding(x, y, self))
                     if s == '@':
                         self.buildings.append(GreenBuilding(x, y, self))
+                    if s == 'U':
+                        self.buildings.append(UrfuBuilding(x, y, self))
                     x += Building.size * 2
                 x = 0
                 y += Building.size
