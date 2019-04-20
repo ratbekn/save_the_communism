@@ -150,7 +150,7 @@ class Game:
 
     def start(self):
         self.started = True
-        self.rip.stop()
+        self.rip_sound.stop()
         pygame.mixer_music.play()
 
     def quit(self):
@@ -239,9 +239,8 @@ class Game:
         pygame.mixer_music.load(r"sounds\Моя оборона 2.mp3")
         pygame.mixer_music.set_volume(0.2)
         pygame.mixer_music.play(10)
-        self.rip = pygame.mixer.Sound(r'sounds\rip.wav')
-        self.rip.set_volume(1)
-        self.step = pygame.mixer.Sound(r'sounds\stone1.ogg')
-        self.attack = pygame.mixer.Sound(r'sounds\attack.ogg')
-        self.attack.set_volume(1)
-        self.boss = pygame.mixer.Sound(r'sounds\boss.ogg')
+        self.rip_sound = pygame.mixer.Sound(r'sounds\rip.wav')
+        self.rip_sound.set_volume(1)
+        self.attack_sound = pygame.mixer.Sound(r'sounds\attack.ogg')
+        self.attack_sound.set_volume(1)
+        self.boss_sound = pygame.mixer.Sound(r'sounds\boss.ogg')
