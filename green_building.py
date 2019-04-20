@@ -6,7 +6,7 @@ from Building import Building
 class GreenBuilding(Building):
     # size = 230s
     def __init__(self, x, y, game):
-        super().__init__(x, y, game, GreenBuilding.size, 'images/green_building.png')
+        super().__init__(x, y, game, Building.size, 'images/green_building.png')
         self.radius = 170
 
     def draw(self):
