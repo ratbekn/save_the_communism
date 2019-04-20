@@ -1,14 +1,12 @@
 import pygame
 import sys
 import random
-import math
 from Building import Building
 from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
 from high_building import HighBuilding
 from main_building import MainBuilding
 from player import Player
-from enemy import Enemy
 from shooting_enemy import ShootingEnemy
 from collision import CollisionsResolver
 from citizen import Citizen
