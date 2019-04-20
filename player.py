@@ -4,6 +4,7 @@ from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
+from bullet import Bullet
 
 
 class Player(Hero):
@@ -19,15 +20,29 @@ class Player(Hero):
         }
         self.pressed = set()
         self.on_pos_changed = None
+        self.bullets_cnt = 3
 
-    def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
+    def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict, mouse_handlers):
         for key in self.dirs:
             keydown_handlers_dict[key].append(self.on_pressed)
             keyup_handlers_dict[key].append(self.on_released)
         keydown_handlers_dict[pygame.K_SPACE].append(self.hit)
+        mouse_handlers.append(self.shoot)
 
     def hit(self, key):
         self.game.objects.append(ForceField(self.x, self.y, self.game))
+
+    def shoot(self, type, key):
+        from fellow import Fellow
+        if self.bullets_cnt > 0:
+            self.bullets_cnt -= 1
+            bullet = Bullet(self.x, self.y,
+                            self.rotation_vector[0], self.rotation_vector[1],
+                            self.game, [Player, Fellow])
+
+            bullet.radius = 20
+            bullet.speed = 20
+            self.game.objects.append(bullet)
 
     def update(self):
         x, y = 0, 0
