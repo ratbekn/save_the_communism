@@ -13,7 +13,7 @@ import pygame.camera
 
 from collections import defaultdict
 
-BACKGROUND_IMAGE_SIZE = 800
+BACKGROUND_IMAGE_SIZE = 128
 
 class Game:
     def __init__(self,
@@ -22,7 +22,10 @@ class Game:
                  frame_rate, width, height):
         self.width = width
         self.height = height
-        self.surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.display = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.surface = pygame.Surface((self.width, self.height))
+        self.screen_width, self.screen_height = pygame.display.get_surface().get_size()
+        self.camera_pos = 0, 0
         self.background_image = pygame.image.load(back_image_filename)
         self.background_image = pygame.transform.scale(self.background_image, (BACKGROUND_IMAGE_SIZE, BACKGROUND_IMAGE_SIZE))
         self.frame_rate = frame_rate
@@ -68,22 +71,35 @@ class Game:
                 for handler in self.mouse_handlers:
                     handler(event.type, event.pos)
 
+    def change_camera_pos(self, dx, dy, x, y):
+        ch_x = self.camera_pos[0] - dx
+        ch_y = self.camera_pos[1] - dy
+        if x < self.screen_width // 2 or x > self.width - self.screen_width // 2:
+            ch_x = self.camera_pos[0]
+        if y < self.screen_height // 2 or y > self.height - self.screen_height // 2:
+            ch_y = self.camera_pos[1]
+        self.camera_pos = ch_x, ch_y
+
     def run(self):
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
             self.enemies.append(self.create_enemy())
         self.objects.append(Citizen(100, 200, self))
-
         self.objects.extend(self.enemies)
+
+        self.player.on_pos_changed = self.change_camera_pos
+
         while not self.game_over:
+            # camera_pos = self.player.move(camera_pos)
+            # self.display.fill((0,0,0))
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
                 for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
                     self.surface.blit(self.background_image, (x, y))
-
             self.handle_events()
             self.update()
             self.draw()
+            self.display.blit(self.surface, self.camera_pos)
             CollisionsResolver.resolve_collisions(self.objects)
             alive_objs = []
             for object in self.objects:
