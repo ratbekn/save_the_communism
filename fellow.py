@@ -46,6 +46,7 @@ class Fellow(Hero):
         return dx, dy
 
     def choose_direction(self):
+        '''
         if math.fabs(self.x - self.game.player.x) > math.fabs(self.y - self.game.player.y):
             if self.x < self.game.player.x:
                 self.move_direction = (1, 0)
@@ -56,6 +57,9 @@ class Fellow(Hero):
                 self.move_direction = (0, 1)
             else:
                 self.move_direction = (0, -1)
+        '''
+        self.move_direction = normalize_direction(
+            get_vector((self.x, self.y), (self.game.player.x, self.game.player.y)))
 
     def shoot(self):
         from player import Player
