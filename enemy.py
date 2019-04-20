@@ -1,7 +1,7 @@
 from force_field import ForceField
 from game_object import GameObject
 import pygame
-import math
+from helpers import *
 
 
 class Enemy(GameObject):
@@ -35,3 +35,11 @@ class Enemy(GameObject):
         for object in coll_objects:
             if isinstance(object, ForceField):
                 self.is_alive = False
+
+    def check_collision_with_other_enemies(self, dx, dy):
+        for enemy in self.game.enemies:
+            if enemy != self and (calculate_distance(self.x + dx, enemy.x) < enemy.radius
+                                  or calculate_distance(self.y + dy, enemy.y) < enemy.radius):
+                return 0, 0
+            else:
+                return dx, dy

@@ -6,13 +6,11 @@ from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
 from citizen import Citizen
+import pygame.camera
+from collections import defaultdict
 
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
-import pygame.camera
-
-from collections import defaultdict
-
 BACKGROUND_IMAGE_SIZE = 800
 
 class Game:
