@@ -4,10 +4,12 @@ from citizen import Citizen
 from enemy import Enemy
 from shooting_enemy import ShootingEnemy
 
+
 class Generator:
     def __init__(self, delay):
         self.delay = delay
         self.generate_after = delay
+
 
 class SerpGenerator(Generator):
     def __init__(self, delay):
@@ -22,6 +24,7 @@ class SerpGenerator(Generator):
 
         self.generate_after -= 1
 
+
 class CitizenGenerator(Generator):
     def __init__(self, delay):
         super().__init__(delay)
@@ -34,6 +37,7 @@ class CitizenGenerator(Generator):
             return Citizen(x, y, game)
 
         self.generate_after -= 1
+
 
 class EnemiesGenerator(Generator):
     def __init__(self, delay):
