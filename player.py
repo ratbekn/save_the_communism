@@ -10,7 +10,7 @@ class Player(Hero):
     def __init__(self, x, y, game):
         super().__init__(x, y, 45, game, 'images/lenin.png')
         self.x, self.y = x, y
-        self.speed = 8
+        self.speed = 17
         self.dirs = {
             pygame.K_a: (-1, 0),
             pygame.K_d: (1, 0),

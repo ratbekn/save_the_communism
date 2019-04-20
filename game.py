@@ -49,7 +49,7 @@ class Game:
         self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers)
         self.objects.append(self.player)
         for i in range(MAX_ENEMIES_COUNT):
-            self.enemies.append(self.create_enemy())
+            self.enemies.append(self.create_hero(Enemy))
         self.objects.append(Citizen(150, 250, self))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
