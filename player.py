@@ -39,7 +39,9 @@ class Player(Hero):
 
         self.move_direction = geometry.normalize_direction((x, y))
         self.move(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed))
-        self.on_pos_changed(int(self.move_direction[0] * self.speed), int(self.move_direction[1] * self.speed), self.x, self.y)
+        self.on_pos_changed(
+            int(self.move_direction[0] * self.speed),
+            int(self.move_direction[1] * self.speed), self.x, self.y)
 
     def on_released(self, key):
         self.pressed.remove(key)
