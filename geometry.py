@@ -1,13 +1,11 @@
 import math
 
-
 def normalize_direction(direction):
     if direction == (0, 0):
         return (0, 0)
     c = math.sqrt(direction[0] ** 2 + direction[1] ** 2)
 
     return (direction[0] / c, direction[1] / c)
-
 
 def get_vector(fr, to):
     dx = to[0] - fr[0]
@@ -17,3 +15,8 @@ def get_vector(fr, to):
 
 def calculate_distance(first_obj, second_obj):
     return math.sqrt((first_obj[0] - second_obj[0]) ** 2 + (first_obj[1] - second_obj[1]) ** 2)
+
+
+def get_rotation_from_vector(x, y):
+    return math.degrees(math.atan2(-y, x) - math.pi / 2)
+

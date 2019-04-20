@@ -1,14 +1,14 @@
 import pygame
-
+from heroes import Hero
 from game_object import GameObject
 from force_field import ForceField
 from enemy import Enemy
 import geometry
 
 
-class Player(GameObject):
+class Player(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 25, game)
+        super().__init__(x, y, 25, game, 'images/lenin.png')
         self.x, self.y = x, y
         self.speed = 8
         self.dirs = {
@@ -18,8 +18,6 @@ class Player(GameObject):
             pygame.K_s: (0, 1)
         }
         self.pressed = set()
-        self.image = pygame.image.load('images/lenin.png')
-        self.image = pygame.transform.scale(self.image, (self.radius * 3, self.radius * 3))
         self.on_pos_changed = None
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict):
@@ -31,12 +29,9 @@ class Player(GameObject):
     def hit(self, key):
         self.game.objects.append(ForceField(self.x, self.y, self.game))
 
-    def draw(self):
-        #pygame.draw.circle(self.game.surface, pygame.Color('red'), (self.x, self.y), 25)
-        self.game.surface.blit(self.image, (self.x - self.radius, self.y - self.radius))
-
     def update(self):
         x, y = 0, 0
+        self.rotation_vector = geometry.get_vector((self.x, self.y), pygame.mouse.get_pos())
         self.move_direction = (0, 0)
         for key in self.pressed:
             x += self.dirs[key][0]

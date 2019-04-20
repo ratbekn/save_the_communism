@@ -1,17 +1,16 @@
 from force_field import ForceField
 from game_object import GameObject
 from fellow import Fellow
+from heroes import Hero
 import pygame
 from geometry import *
 
 
-class Enemy(GameObject):
+class Enemy(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 25, game)
+        super().__init__(x, y, 25, game, 'images/enemy.png')
         self.x = x
         self.y = y
-        self.image = pygame.image.load('images/enemy.png')
-        self.image = pygame.transform.scale(self.image, (self.radius * 3, self.radius * 3))
 
     def update(self):
         self.choose_direction()
@@ -19,10 +18,6 @@ class Enemy(GameObject):
         dy = self.move_direction[1] * self.speed
         dx, dy = self.check_collision_with_other_enemies(dx, dy)
         self.move(dx, dy)
-
-    def draw(self):
-        #pygame.draw.circle(self.game.surface, pygame.Color('BLUE'), (self.x, self.y), self.radius)
-        self.game.surface.blit(self.image, (self.x - self.radius, self.y - self.radius))
 
     def choose_direction(self):
         if math.fabs(self.x - self.game.player.x) > math.fabs(self.y - self.game.player.y):
