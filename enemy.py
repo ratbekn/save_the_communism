@@ -13,6 +13,8 @@ class Enemy(Hero):
         self.y = y
 
     def update(self):
+        self.rotation_vector = get_vector(
+            (self.x, self.y), (self.game.player.x, self.game.player.y))
         self.choose_direction()
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed
