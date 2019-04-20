@@ -6,13 +6,12 @@ from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
 from citizen import Citizen
+import pygame.camera
+from collections import defaultdict
+from geometry import *
 
 MAX_ENEMIES_COUNT = 7
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
-import pygame.camera
-
-from collections import defaultdict
-
 BACKGROUND_IMAGE_SIZE = 128
 
 class Game:
@@ -118,5 +117,7 @@ class Game:
         y = random.randrange(self.surface.get_width())
         while math.fabs(y - self.player.y) < MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY:
             y = random.randrange(self.surface.get_width())
-
+        for e in self.enemies:
+            if calculate_distance((x, y), (e.x, e.y)) < e.radius * 2:
+                return self.create_enemy()
         return Enemy(x, y, self)

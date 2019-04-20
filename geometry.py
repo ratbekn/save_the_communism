@@ -12,5 +12,10 @@ def get_vector(fr, to):
     dy = to[1] - fr[1]
     return normalize_direction((dx, dy))
 
+
+def calculate_distance(first_obj, second_obj):
+    return math.sqrt((first_obj[0] - second_obj[0]) ** 2 + (first_obj[1] - second_obj[1]) ** 2)
+
+
 def get_rotation_from_vector(x, y):
     math.atan2()

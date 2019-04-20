@@ -3,7 +3,7 @@ from game_object import GameObject
 from fellow import Fellow
 from heroes import Hero
 import pygame
-import math
+from geometry import *
 
 
 class Enemy(Hero):
@@ -16,6 +16,7 @@ class Enemy(Hero):
         self.choose_direction()
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed
+        dx, dy = self.check_collision_with_other_enemies(dx, dy)
         self.move(dx, dy)
 
     def choose_direction(self):
@@ -34,3 +35,10 @@ class Enemy(Hero):
         for object in coll_objects:
             if isinstance(object, ForceField) or isinstance(object, Fellow):
                 self.is_alive = False
+
+    def check_collision_with_other_enemies(self, dx, dy):
+        for enemy in self.game.enemies:
+            if enemy != self:
+                if calculate_distance((self.x + dx, self.y + dy), (enemy.x, enemy.y)) < enemy.radius * 2:
+                    return 0, 0
+        return dx, dy
