@@ -2,6 +2,8 @@ import pygame
 import sys
 import random
 import math
+
+import lives
 from Building import Building
 from Urfu_building import UrfuBuilding
 from green_building import GreenBuilding
@@ -100,6 +102,7 @@ class Game:
             self.objects.append(self.create_hero(Citizen))
         self.objects.extend(self.enemies)
         self.player.on_pos_changed = self.change_camera_pos
+        self.ui = lives.Lives(10, 10, self)
 
     def collide_with_building(self, x, y, r):
         for building in self.buildings:
@@ -112,7 +115,7 @@ class Game:
             o.update()
 
     def draw(self):
-        for o in reversed(self.objects):
+        for o in self.objects:
             o.draw()
 
     def handle_events(self):
@@ -174,6 +177,8 @@ class Game:
                 self.draw()
 
                 self.display.blit(self.surface, self.camera_pos)
+                self.ui.draw()
+
                 CollisionsResolver.resolve_collisions(self.objects)
 
                 self.objects = self.get_alive_objects(self.objects)
