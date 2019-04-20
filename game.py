@@ -1,6 +1,7 @@
 import pygame
 import sys
 import random
+import math
 from player import Player
 from enemy import Enemy
 from collision import CollisionsResolver
@@ -9,10 +10,9 @@ import pygame.camera
 from collections import defaultdict
 from geometry import *
 
-MAX_ENEMIES_COUNT = 1
+MAX_ENEMIES_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
-
 
 class Game:
     def __init__(self,
@@ -30,9 +30,9 @@ class Game:
         self.frame_rate = frame_rate
         self.game_over = False
         self.objects = []
-        self.fellows = []
-        self.player = Player(500, 500, self)
+        self.player = Player(100, 100, self)
         self.enemies = []
+        self.fellows = []
         pygame.mixer.pre_init(44100, 16, 2, 4096)
         pygame.init()
         pygame.font.init()
@@ -90,7 +90,7 @@ class Game:
 
         self.player.on_pos_changed = self.change_camera_pos
 
-        while not self.game_over:
+        while self.player.is_alive:
             for y in range(0, self.height, BACKGROUND_IMAGE_SIZE):
                 for x in range(0, self.width, BACKGROUND_IMAGE_SIZE):
                     self.surface.blit(self.background_image, (x, y))
@@ -102,6 +102,7 @@ class Game:
 
             self.objects = self.get_alive_objects(self.objects)
             self.enemies = self.get_alive_objects(self.enemies)
+            self.fellows = self.get_alive_objects(self.fellows)
 
             pygame.display.update()
             self.clock.tick(self.frame_rate)

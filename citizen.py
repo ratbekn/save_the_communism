@@ -7,7 +7,7 @@ from heroes import Hero
 
 class Citizen(Hero):
     def __init__(self, x, y, game):
-        super().__init__(x, y, 20, game, 'images/citizen.png')
+        super().__init__(x, y, 45, game, 'images/citizen.png')
 
     def update(self):
         pass
@@ -16,6 +16,6 @@ class Citizen(Hero):
         for object in coll_objects:
             if isinstance(object, ForceField):
                 self.is_alive = False
-                f = Fellow(self.x, self.y, self.game)
-                self.game.fellows.append(f)
-                self.game.objects.append(f)
+                fellow = Fellow(self.x, self.y, self.game)
+                self.game.objects.append(fellow)
+                self.game.fellows.append(fellow)
