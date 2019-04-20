@@ -3,6 +3,8 @@ import sys
 import random
 import math
 from Building import Building
+from green_building import GreenBuilding
+from high_building import HighBuilding
 from main_building import MainBuilding
 from player import Player
 from enemy import Enemy
@@ -55,15 +57,21 @@ class Game:
                 for s in line:
                     if s == '#':
                         self.buildings.append(MainBuilding(x, y, self))
-                    x += MainBuilding.size * 2
+                    if s == '1':
+                        self.buildings.append(HighBuilding(x, y, self))
+                    if s == '@':
+                        self.buildings.append(GreenBuilding(x, y, self))
+                    x += Building.size * 2
                 x = 0
-                y +=MainBuilding.size
-        self.objects.extend(self.buildings)
+                y += Building.size
         self.player = Player(150, 150, self)
-        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
         self.objects.append(self.player)
-        for i in range(MAX_ENEMIES_COUNT // 2):
-            self.enemies.append(self.create_hero(Enemy))
+        self.objects.extend(self.buildings)
+
+        self.player.setup_handlers(self.keydown_handlers, self.keyup_handlers, self.mouse_handlers)
+
+        # for i in range(MAX_ENEMIES_COUNT // 2):
+            # self.enemies.append(self.create_hero(Enemy))
         for i in range(MAX_ENEMIES_COUNT // 2):
             self.enemies.append(self.create_hero(ShootingEnemy))
         self.objects.append(Citizen(150, 250, self))

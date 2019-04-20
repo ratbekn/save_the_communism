@@ -22,6 +22,7 @@ class Player(Hero):
         self.pressed = set()
         self.on_pos_changed = None
         self.bullets_cnt = 3
+        self.radius = 35
         self.xp = 10
 
     def setup_handlers(self, keydown_handlers_dict, keyup_handlers_dict, mouse_handlers):
