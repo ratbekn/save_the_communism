@@ -1,8 +1,6 @@
 import pygame
 import sys
 import random
-import math
-from Building import Building
 from main_building import MainBuilding
 from player import Player
 from enemy import Enemy
@@ -17,6 +15,7 @@ MAX_ENEMIES_COUNT = 7
 MAX_CITIZENS_COUNT = 3
 MIN_DISTANCE_BETWEEN_PLAYER_AND_ENEMY = 100
 BACKGROUND_IMAGE_SIZE = 128
+
 
 class Game:
     def __init__(self,
@@ -38,6 +37,9 @@ class Game:
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption(caption)
+        pygame.mixer_music.load("Моя оборона 2.mp3")
+        pygame.mixer_music.set_volume(0.2)
+        pygame.mixer_music.play()
         self.keydown_handlers = defaultdict(list)
         self.keyup_handlers = defaultdict(list)
         self.mouse_handlers = []
