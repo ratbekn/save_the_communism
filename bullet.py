@@ -15,8 +15,9 @@ class Bullet(MovableObject):
                   int(self.move_direction[1] * self.speed))
         if self.collision:
             self.is_alive = False
+
     def draw(self):
-        pygame.draw.circle(self.game.surface, pygame.Color('yellow'), (self.x, self.y), 2)
+        pygame.draw.circle(self.game.surface, pygame.Color('yellow'), (int(self.x), int(self.y)), 2)
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:

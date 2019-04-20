@@ -23,13 +23,10 @@ class Enemy(Hero):
         dx = self.move_direction[0] * self.speed
         dy = self.move_direction[1] * self.speed
         dx, dy = self.check_collision_with_other_enemies(dx, dy)
-        self.move(dx, dy)
-
-    def draw(self):
-        #pygame.draw.circle(self.game.surface, pygame.Color('BLUE'), (self.x, self.y), self.radius)
-        self.game.surface.blit(self.image, (self.x - self.radius, self.y - self.radius))
+        self.move(int(dx), int(dy))
 
     def choose_direction(self):
+        '''
         if math.fabs(self.x - self.game.player.x) > math.fabs(self.y - self.game.player.y):
             if self.x < self.game.player.x:
                 self.move_direction = (1, 0)
@@ -40,6 +37,9 @@ class Enemy(Hero):
                 self.move_direction = (0, 1)
             else:
                 self.move_direction = (0, -1)
+        '''
+        self.move_direction = normalize_direction(
+            get_vector((self.x, self.y), (self.game.player.x, self.game.player.y)))
 
     def handle_collisions(self, coll_objects):
         for object in coll_objects:
