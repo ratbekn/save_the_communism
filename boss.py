@@ -10,6 +10,7 @@ class Boss(Hero):
         self.x = x
         self.y = y
         self.xp = 100
+        self.game.boss.play()
 
     def update(self):
         pass

@@ -238,9 +238,10 @@ class Game:
     def import_sounds(self):
         pygame.mixer_music.load(r"sounds\Моя оборона 2.mp3")
         pygame.mixer_music.set_volume(0.2)
-        pygame.mixer_music.play()
+        pygame.mixer_music.play(10)
         self.rip = pygame.mixer.Sound(r'sounds\rip.wav')
         self.rip.set_volume(1)
         self.step = pygame.mixer.Sound(r'sounds\stone1.ogg')
         self.attack = pygame.mixer.Sound(r'sounds\attack.ogg')
         self.attack.set_volume(1)
+        self.boss = pygame.mixer.Sound(r'sounds\boss.ogg')
