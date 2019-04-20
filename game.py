@@ -182,7 +182,7 @@ class Game:
         image = pygame.transform.scale(image, (1366, 768))
         self.display.blit(image, (0, 0))
         pygame.display.update()
-        pygame.time.delay(1500)
+        pygame.time.delay(2500)
         image = pygame.image.load('images/lenin/lenin' + str(7) + '.png')
         image = pygame.transform.scale(image, (1366, 768))
         self.display.blit(image, (0, 0))
